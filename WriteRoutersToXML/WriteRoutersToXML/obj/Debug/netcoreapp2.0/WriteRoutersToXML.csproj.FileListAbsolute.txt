@@ -1,0 +1,12 @@
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\bin\Debug\netcoreapp2.0\WriteRoutersToXML.deps.json
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\bin\Debug\netcoreapp2.0\WriteRoutersToXML.runtimeconfig.json
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\bin\Debug\netcoreapp2.0\WriteRoutersToXML.runtimeconfig.dev.json
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\bin\Debug\netcoreapp2.0\WriteRoutersToXML.dll
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\bin\Debug\netcoreapp2.0\WriteRoutersToXML.pdb
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\obj\Debug\netcoreapp2.0\WriteRoutersToXML.csprojResolveAssemblyReference.cache
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\obj\Debug\netcoreapp2.0\WriteRoutersToXML.csproj.CoreCompileInputs.cache
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\obj\Debug\netcoreapp2.0\WriteRoutersToXML.AssemblyInfoInputs.cache
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\obj\Debug\netcoreapp2.0\WriteRoutersToXML.AssemblyInfo.cs
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\obj\Debug\netcoreapp2.0\WriteRoutersToXML.dll
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\obj\Debug\netcoreapp2.0\WriteRoutersToXML.pdb
+B:\RoutersToXML\WriteRoutersToXML\WriteRoutersToXML\bin\Debug\netcoreapp2.0\WriteRoutersToXML.dll.config
