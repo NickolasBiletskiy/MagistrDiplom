@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using WriteRoutersToXML.Helpers;
 using WriteRoutersToXML.Models.Interfaces;
 
-namespace WriteRoutersToXML.Models
+namespace WriteRoutersToXML.Models.NetComponents
 {
     [Serializable]
     public class Router : IDeserializable
@@ -14,10 +11,9 @@ namespace WriteRoutersToXML.Models
 
         #region Fields
 
+        public int Id { get; set; }
         public string Name { get; set; }
-
         public Interface[] Interfaces { get; set; }
-
         public bool IsActive { get; set; }
 
         #endregion
@@ -29,10 +25,10 @@ namespace WriteRoutersToXML.Models
 
         }
 
-        public Router(string name, int numberOfInterfaces)
+        public Router(string name, int id, int numberOfInterfaces)
         {
+            Id = id;
             Name = name;
-
             IsActive = true;
 
             Interfaces = new Interface[numberOfInterfaces];
@@ -63,7 +59,10 @@ namespace WriteRoutersToXML.Models
             Interface interfaceTo = anotherRouter.GetFirstFreeInterface();
             if (interfaceTo == null) throw new Exception($"There no free interfaces in {interfaceTo.Router.Name}");
 
-            interFaceFrom.CreateConnection(interfaceTo);
+            //TODO change 1 with specific value
+            //remove this stub
+            Random rand = new Random();
+            interFaceFrom.CreateConnection(interfaceTo, rand.Next(1, 5));
 
         }
 
@@ -72,19 +71,23 @@ namespace WriteRoutersToXML.Models
             return Interfaces.FirstOrDefault(x => !x.IsConnected);
         }
 
-        public string WriteConnectionsToConsole()
+        #region Logging
+
+        public string LogConnections()
         {
             StringBuilder result = new StringBuilder(this.Name);
             result.Append("\n");
             Interfaces.Where(x => x.IsConnected).ToList().ForEach((inter) =>
             {
                 string anotherRouterName = (inter.Link.Interface1 == inter) ? inter.Link.Interface2.Router.Name : inter.Link.Interface1.Router.Name;
-                result.Append($"Connection to {anotherRouterName} using {inter.FullName} \n");
+                result.Append($"Connection to {anotherRouterName} using {inter.FullName}, Metric = {inter.Link.Metric} \n");
                 //result.Append("Connection to");
             });
             Console.WriteLine(result.ToString());
             return result.ToString();
         }
+
+        #endregion
 
         #endregion
     }

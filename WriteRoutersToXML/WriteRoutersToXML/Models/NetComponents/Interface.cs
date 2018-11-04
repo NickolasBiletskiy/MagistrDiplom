@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using WriteRoutersToXML.Helpers;
 using WriteRoutersToXML.Models.Interfaces;
 
-namespace WriteRoutersToXML.Models
+namespace WriteRoutersToXML.Models.NetComponents
 {
     [Serializable]
     public class Interface : IDeserializable
@@ -43,27 +43,12 @@ namespace WriteRoutersToXML.Models
 
         public void OnDeserializing()
         {
-            //if (Link != null)
-            //{
-            //    var interfacesToConnectNames = Link.Name.Split(NameSplitters.INTERFACES_SPLITTER);
-            //    if (interfacesToConnectNames[0] == FullName)
-            //    {
-            //        Link.Interface1 = this;
-            //    }
-            //    else if (interfacesToConnectNames[1] == FullName)
-            //    {
-            //        Link.Interface2 = this;
-            //    }
-            //    else
-            //    {
-            //        throw new Exception($"Exception on interface deserializing. Couldn parse Link {Link.Name}");
-            //    }
-            //}
+
         }
 
-        public void CreateConnection (Interface interfaceToConnect)
-        {
-            Link = new Link(this, interfaceToConnect);
+        public void CreateConnection (Interface interfaceToConnect, int length)
+        {            
+            Link = new Link(this, interfaceToConnect, length);
             IsConnected = true;
 
             Console.WriteLine($"Initiated connection between {FullName}  and {interfaceToConnect.FullName}");
@@ -82,9 +67,7 @@ namespace WriteRoutersToXML.Models
 
             Console.WriteLine($"Successfully connected {Link.Interface1.FullName}  and {Link.Interface2.FullName}");
         }
-
-
-
+        
         #endregion
 
     }

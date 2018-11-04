@@ -1,5 +1,5 @@
 ﻿using System.Configuration;
-using WriteRoutersToXML.Models;
+using WriteRoutersToXML.Models.NetComponents;
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;

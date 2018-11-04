@@ -1004,11 +1004,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "B:\\RoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML.csproj",
+      "projectUniqueName": "B:\\DiplomProject\\WriteRoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML.csproj",
       "projectName": "WriteRoutersToXML",
-      "projectPath": "B:\\RoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML.csproj",
+      "projectPath": "B:\\DiplomProject\\WriteRoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML.csproj",
       "packagesPath": "C:\\Users\\Nickolas\\.nuget\\packages\\",
-      "outputPath": "B:\\RoutersToXML\\WriteRoutersToXML\\WriteRoutersToXML\\obj\\",
+      "outputPath": "B:\\DiplomProject\\WriteRoutersToXML\\WriteRoutersToXML\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",

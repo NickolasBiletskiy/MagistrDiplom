@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using WriteRoutersToXML.Models;
+using WriteRoutersToXML.Models.NetComponents;
 using WriteRoutersToXML.Services;
 
 namespace WriteRoutersToXML
@@ -18,7 +18,7 @@ namespace WriteRoutersToXML
 
                 for (var i = 0; i < 5; i++)
                 {
-                    routers[i] = new Router("router" + i, 5);
+                    routers[i] = new Router("router" + i, i, 5);
                 }
 
                 routers[0].ConnectTo(routers[2]);
@@ -29,19 +29,17 @@ namespace WriteRoutersToXML
                 routers[3].ConnectTo(routers[4]);
 
                 RouterSerializeService.SerializeRouters(routers);
-
-                foreach (Router router in routers)
-                {
-                    router.WriteConnectionsToConsole();
-                }
+                
+                Controller.Instance.InitializeController(routers);
             }
             else
             {
                 var routers = RouterSerializeService.DeserializeRouters();
-                foreach(Router router in routers)
-                {
-                    router.WriteConnectionsToConsole();
-                }
+
+                Controller.Instance.InitializeController(routers);
+
+                var paths = Controller.Instance.GetAllPaths(0, 4);
+                
                 Console.ReadKey();
             }
 

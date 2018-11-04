@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <ArrayOfRouter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Router>
+    <Id>0</Id>
     <Name>router0</Name>
     <Interfaces>
       <Interface>
@@ -10,6 +11,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int0|router2-Int0</Name>
+          <Length>3</Length>
         </Link>
       </Interface>
       <Interface>
@@ -19,6 +21,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int1|router3-Int0</Name>
+          <Length>4</Length>
         </Link>
       </Interface>
       <Interface>
@@ -40,6 +43,7 @@
     <IsActive>true</IsActive>
   </Router>
   <Router>
+    <Id>1</Id>
     <Name>router1</Name>
     <Interfaces>
       <Interface>
@@ -49,6 +53,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router1-Int0|router2-Int1</Name>
+          <Length>2</Length>
         </Link>
       </Interface>
       <Interface>
@@ -58,6 +63,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router1-Int1|router4-Int0</Name>
+          <Length>4</Length>
         </Link>
       </Interface>
       <Interface>
@@ -79,6 +85,7 @@
     <IsActive>true</IsActive>
   </Router>
   <Router>
+    <Id>2</Id>
     <Name>router2</Name>
     <Interfaces>
       <Interface>
@@ -88,6 +95,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int0|router2-Int0</Name>
+          <Length>3</Length>
         </Link>
       </Interface>
       <Interface>
@@ -97,6 +105,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router1-Int0|router2-Int1</Name>
+          <Length>2</Length>
         </Link>
       </Interface>
       <Interface>
@@ -106,6 +115,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router2-Int2|router4-Int1</Name>
+          <Length>1</Length>
         </Link>
       </Interface>
       <Interface>
@@ -122,6 +132,7 @@
     <IsActive>true</IsActive>
   </Router>
   <Router>
+    <Id>3</Id>
     <Name>router3</Name>
     <Interfaces>
       <Interface>
@@ -131,6 +142,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int1|router3-Int0</Name>
+          <Length>4</Length>
         </Link>
       </Interface>
       <Interface>
@@ -140,6 +152,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router3-Int1|router4-Int2</Name>
+          <Length>1</Length>
         </Link>
       </Interface>
       <Interface>
@@ -161,6 +174,7 @@
     <IsActive>true</IsActive>
   </Router>
   <Router>
+    <Id>4</Id>
     <Name>router4</Name>
     <Interfaces>
       <Interface>
@@ -170,6 +184,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router1-Int1|router4-Int0</Name>
+          <Length>4</Length>
         </Link>
       </Interface>
       <Interface>
@@ -179,6 +194,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router2-Int2|router4-Int1</Name>
+          <Length>1</Length>
         </Link>
       </Interface>
       <Interface>
@@ -188,6 +204,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router3-Int1|router4-Int2</Name>
+          <Length>1</Length>
         </Link>
       </Interface>
       <Interface>
