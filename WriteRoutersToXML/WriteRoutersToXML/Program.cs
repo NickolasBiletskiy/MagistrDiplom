@@ -39,8 +39,42 @@ namespace WriteRoutersToXML
                 Controller.Instance.InitializeController(routers);
 
                 var paths = Controller.Instance.GetAllPaths(0, 4);
-                
+
+                HandleUserInput();
+
                 Console.ReadKey();
+            }
+
+        }
+
+        static void HandleUserInput()
+        {
+            bool isContinue = true;
+            while (isContinue)
+            {
+                Console.WriteLine("Hello, please, enter router from");
+                int routerFrom;
+                while (!int.TryParse(Console.ReadLine(), out routerFrom))
+                {
+                    Console.WriteLine("please enter integer");
+                };
+
+                int routerTo;
+                Console.WriteLine("Please enter router to");
+                while (!int.TryParse(Console.ReadLine(), out routerTo))
+                {
+                    Console.WriteLine("please enter integer");
+                };
+
+                Controller.Instance.GetAllPaths(routerFrom, routerTo);
+
+                Console.WriteLine("do you want to continue? y/n");
+
+                var userChoice = Console.ReadKey();
+                if (userChoice.KeyChar != 'y')
+                {
+                    isContinue = false;
+                }
             }
 
         }

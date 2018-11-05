@@ -16,10 +16,8 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         private int[,] linkMatrix;
 
-        //TODO create structure to save all paths
-        private List<Path> currentPaths;
-
-        #endregion
+        //dictionary for saving allpahts between points. Key -> Tuple(nodeFrom, nodeTo), Value - List<Path>
+        private Dictionary<Tuple<int, int>, List<Path>> _allPaths = new Dictionary<Tuple<int, int>, List<Path>>();
 
         //Singleton
         private static Controller _instance = null;
@@ -39,6 +37,8 @@ namespace WriteRoutersToXML.Models.NetComponents
             }
             private set { }
         }
+
+        #endregion
 
         #region cstor
 
@@ -79,12 +79,23 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         public List<Path> GetAllPaths(int routerFrom, int routerTo)
         {
+            var tuple = new Tuple<int, int>(routerFrom, routerTo);
+            List<Path> currentPaths;
+            if (_allPaths.TryGetValue(tuple, out currentPaths))
+            {
+                return currentPaths;
+            }
+
             RoutingService routingService = new RoutingService(linkMatrix);
-            currentPaths = routingService.GetAllPaths(routerFrom, routerTo);
 
-            LoggerService.Instance.CustomizeOutput(LogType.Paths, LogPaths);
+            _allPaths.Add(tuple, routingService.GetAllPaths(routerFrom, routerTo));
 
-            return currentPaths;
+            LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
+            {
+                LogPaths(routerFrom, routerTo, _allPaths[tuple]);
+            });
+
+            return _allPaths[tuple];
         }
 
         #region Log methods
@@ -126,10 +137,10 @@ namespace WriteRoutersToXML.Models.NetComponents
             }
         }
 
-        public void LogPaths()
+        public void LogPaths(int routerFrom, int routerTo, List<Path> paths)
         {
             StringBuilder result = new StringBuilder();
-            foreach (Path path in currentPaths)
+            foreach (Path path in paths)
             {
                 foreach (int nodeId in path.NodesInPath)
                 {
@@ -137,7 +148,8 @@ namespace WriteRoutersToXML.Models.NetComponents
                     if (nodeId != path.NodesInPath[path.NodesInPath.Count - 1])
                     {
                         result.Append("->");
-                    } else
+                    }
+                    else
                     {
                         result.Append("\tMetric = " + path.Metric);
                     }
