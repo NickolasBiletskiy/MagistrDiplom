@@ -5,17 +5,18 @@ namespace WriteRoutersToXML.Models.Routing
 {
     public class Path
     {
+        public Guid PathId;
         public List<int> NodesInPath;
 
         public int Metric { get; set; }
 
         public Path()
         {
-
+            PathId = Guid.NewGuid();
         }
 
-        public Path (int startNode)
-        {
+        public Path (int startNode) : this()
+        {            
             NodesInPath = new List<int>();
             NodesInPath.Add(startNode);
         }

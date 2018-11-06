@@ -86,9 +86,12 @@ namespace WriteRoutersToXML.Models.NetComponents
                 return currentPaths;
             }
 
-            RoutingService routingService = new RoutingService(linkMatrix);
+            var paths = new List<Path>();
+            Path startPath = new Path(routerFrom);
+            //paths.Add(startPath);
+            CreateNewPath(startPath, routerFrom, routerTo, paths);
 
-            _allPaths.Add(tuple, routingService.GetAllPaths(routerFrom, routerTo));
+            _allPaths.Add(tuple, paths);
 
             LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
             {
@@ -97,6 +100,48 @@ namespace WriteRoutersToXML.Models.NetComponents
 
             return _allPaths[tuple];
         }
+
+        #region Routing
+
+        private void CreateNewPath(Path path, int currentNode, int lastNode, List<Path> paths)
+        {
+            bool isFirstInterface = true;
+            Path currentPath = path;
+            var pathSavePoint = path.Clone();
+            for (var j = 0; j < linkMatrix.GetLength(1); j++)
+            {
+                if (linkMatrix[currentNode, j] != 0)
+                {
+                    if (pathSavePoint.NodesInPath.Contains(j))
+                    {
+                        continue;
+                    }                    
+
+                    if (isFirstInterface)
+                    {                        
+                        isFirstInterface = false;
+                    }
+                    else
+                    {
+                        currentPath = pathSavePoint.Clone();
+                    }
+
+                    currentPath.AddNodeToPath(j, linkMatrix[currentNode, j]);
+
+                    if (j != lastNode)
+                    {
+                        CreateNewPath(currentPath, j, lastNode, paths);
+                    }
+                    else
+                    {
+                        //Path is full
+                        paths.Add(currentPath);
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region Log methods
 
@@ -151,7 +196,7 @@ namespace WriteRoutersToXML.Models.NetComponents
                     }
                     else
                     {
-                        result.Append("\tMetric = " + path.Metric);
+                        result.Append($"\tMetric = {path.Metric} PathId = {path.PathId}");
                     }
                 }
                 result.Append("\n");
