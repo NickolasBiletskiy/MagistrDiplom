@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using WriteRoutersToXML.Models.NetComponents;
 
 namespace WriteRoutersToXML.Models.Routing
 {
     public class Path
     {
         public Guid PathId;
-        public List<int> NodesInPath;
+        public List<Router> RoutersInPath;
 
         public int Metric { get; set; }
 
         public Path()
         {
             PathId = Guid.NewGuid();
+            RoutersInPath = new List<Router>();
         }
 
-        public Path (int startNode) : this()
-        {            
-            NodesInPath = new List<int>();
-            NodesInPath.Add(startNode);
+        public Path (Router startRouter) : this()
+        {
+            RoutersInPath.Add(startRouter);
         }
         
         #region Public methods
 
-        public void AddNodeToPath(int nodeId, int metric)
+        public void AddNodeToPath(Router router)
         {
-            if (!NodesInPath.Contains(nodeId))
-            {
-                NodesInPath.Add(nodeId);
-                Metric += metric;
+            if (!RoutersInPath.Contains(router))
+            {                
+                RoutersInPath.Add(router);
             }
         }
 
         public Path Clone()
         {
             Path clonedPath = new Path();
-            clonedPath.Metric = Metric;
-            clonedPath.NodesInPath = new List<int>(NodesInPath);
+
+            clonedPath.RoutersInPath = new List<Router>(RoutersInPath);
 
             return clonedPath;
         }

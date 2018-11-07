@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using WriteRoutersToXML.Extensions;
 using WriteRoutersToXML.Models.Routing;
 using WriteRoutersToXML.Services;
@@ -14,7 +15,7 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         private ICollection<Router> _routers;
 
-        private int[,] linkMatrix;
+        //private int[,] linkMatrix;
 
         //dictionary for saving allpahts between points. Key -> Tuple(nodeFrom, nodeTo), Value - List<Path>
         private Dictionary<Tuple<int, int>, List<Path>> _allPaths = new Dictionary<Tuple<int, int>, List<Path>>();
@@ -55,22 +56,6 @@ namespace WriteRoutersToXML.Models.NetComponents
         public void InitializeController(ICollection<Router> routers)
         {
             _routers = routers;
-            linkMatrix = new int[routers.Count, routers.Count];
-
-            foreach (var router in routers)
-            {
-                foreach (var inter in router.Interfaces)
-                {
-                    if (inter.IsConnected)
-                    {
-                        var anotherConnectedInterface = inter.GetAnotherConnectedInterface();
-                        if (anotherConnectedInterface != null)
-                        {
-                            linkMatrix[router.Id, anotherConnectedInterface.Router.Id] = inter.Link.Metric;
-                        }
-                    }
-                }
-            }
 
             LoggerService.Instance.CustomizeOutput(LogType.ControllerLog, LogInitializing);
 
@@ -87,9 +72,11 @@ namespace WriteRoutersToXML.Models.NetComponents
             }
 
             var paths = new List<Path>();
-            Path startPath = new Path(routerFrom);
-            //paths.Add(startPath);
-            CreateNewPath(startPath, routerFrom, routerTo, paths);
+            var linkMatrix = GetLinkMatrix();
+
+            Path startPath = new Path(_routers.FirstOrDefault(x=>x.RouterInSystemId == routerFrom));
+ 
+            CreateNewPath(startPath, routerFrom, routerTo, paths, linkMatrix);
 
             _allPaths.Add(tuple, paths);
 
@@ -103,7 +90,7 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Routing
 
-        private void CreateNewPath(Path path, int currentNode, int lastNode, List<Path> paths)
+        private void CreateNewPath(Path path, int currentNode, int lastNode, List<Path> paths, int[,] linkMatrix)
         {
             bool isFirstInterface = true;
             Path currentPath = path;
@@ -112,7 +99,8 @@ namespace WriteRoutersToXML.Models.NetComponents
             {
                 if (linkMatrix[currentNode, j] != 0)
                 {
-                    if (pathSavePoint.NodesInPath.Contains(j))
+                    Router currentRouter = _routers.FirstOrDefault(x => x.RouterInSystemId == j);
+                    if (pathSavePoint.RoutersInPath.Contains(currentRouter))
                     {
                         continue;
                     }                    
@@ -126,11 +114,11 @@ namespace WriteRoutersToXML.Models.NetComponents
                         currentPath = pathSavePoint.Clone();
                     }
 
-                    currentPath.AddNodeToPath(j, linkMatrix[currentNode, j]);
+                    currentPath.AddNodeToPath(currentRouter);
 
                     if (j != lastNode)
                     {
-                        CreateNewPath(currentPath, j, lastNode, paths);
+                        CreateNewPath(currentPath, j, lastNode, paths, linkMatrix);
                     }
                     else
                     {
@@ -158,6 +146,7 @@ namespace WriteRoutersToXML.Models.NetComponents
             Console.WriteLine(topHeader.ToString());
             Console.ForegroundColor = ConsoleColor.White;
 
+            var linkMatrix = GetLinkMatrix();
             for (var i = 0; i < linkMatrix.GetLength(0); i++)
             {
                 for (var j = 0; j < linkMatrix.GetLength(1); j++)
@@ -187,10 +176,10 @@ namespace WriteRoutersToXML.Models.NetComponents
             StringBuilder result = new StringBuilder();
             foreach (Path path in paths)
             {
-                foreach (int nodeId in path.NodesInPath)
+                foreach (Router router in path.RoutersInPath)
                 {
-                    result.Append(nodeId);
-                    if (nodeId != path.NodesInPath[path.NodesInPath.Count - 1])
+                    result.Append(router.RouterInSystemId);
+                    if (router != path.RoutersInPath[path.RoutersInPath.Count - 1])
                     {
                         result.Append("->");
                     }
@@ -205,6 +194,33 @@ namespace WriteRoutersToXML.Models.NetComponents
         }
 
         #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private int[,] GetLinkMatrix() {
+            int[,] linkMatrix = new int[_routers.Count, _routers.Count];
+
+            int routerInSystemId = 0;
+            foreach (var router in _routers)
+            {
+                router.RouterInSystemId = routerInSystemId++;
+                foreach (var inter in router.Interfaces)
+                {
+                    if (inter.IsConnected)
+                    {
+                        var anotherConnectedInterface = inter.GetAnotherConnectedInterface();
+                        if (anotherConnectedInterface != null)
+                        {
+                            linkMatrix[router.RouterInSystemId, anotherConnectedInterface.Router.RouterInSystemId] = inter.Link.Metric;
+                        }
+                    }
+                }
+            }
+
+            return linkMatrix;
+        }
 
         #endregion
     }

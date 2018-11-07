@@ -11,7 +11,8 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Fields
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+        public int RouterInSystemId { get; set; }
         public string Name { get; set; }
         public Interface[] Interfaces { get; set; }
         public bool IsActive { get; set; }
@@ -22,12 +23,11 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         public Router()
         {
-
+            Id = Guid.NewGuid();
         }
 
-        public Router(string name, int id, int numberOfInterfaces)
+        public Router(string name, int numberOfInterfaces) : this()
         {
-            Id = id;
             Name = name;
             IsActive = true;
 

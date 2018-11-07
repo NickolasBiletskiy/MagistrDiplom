@@ -18,7 +18,7 @@ namespace WriteRoutersToXML
 
                 for (var i = 0; i < 5; i++)
                 {
-                    routers[i] = new Router("router" + i, i, 5);
+                    routers[i] = new Router("router" + i, 5);
                 }
 
                 routers[0].ConnectTo(routers[2]);
