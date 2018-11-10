@@ -18,7 +18,7 @@ namespace WriteRoutersToXML.Models.NetComponents
         //private int[,] linkMatrix;
 
         //dictionary for saving allpahts between points. Key -> Tuple(nodeFrom, nodeTo), Value - List<Path>
-        private Dictionary<Tuple<int, int>, List<Path>> _allPaths = new Dictionary<Tuple<int, int>, List<Path>>();
+        private Dictionary<Tuple<Router, Router>, List<Path>> _allPaths = new Dictionary<Tuple<Router, Router>, List<Path>>();
 
         //Singleton
         private static Controller _instance = null;
@@ -64,10 +64,17 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         public List<Path> GetAllPaths(int routerFrom, int routerTo)
         {
-            var tuple = new Tuple<int, int>(routerFrom, routerTo);
+            Router routerStart = _routers.FirstOrDefault(x => x.RouterInSystemId == routerFrom);
+            Router routerEnd = _routers.FirstOrDefault(x => x.RouterInSystemId == routerTo);
+
+            var tuple = new Tuple<Router, Router>(routerStart, routerEnd);
             List<Path> currentPaths;
             if (_allPaths.TryGetValue(tuple, out currentPaths))
             {
+                LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
+                {
+                    LogPaths(routerFrom, routerTo, currentPaths);
+                });
                 return currentPaths;
             }
 
@@ -99,6 +106,7 @@ namespace WriteRoutersToXML.Models.NetComponents
         {
             int lastRouterIndex = _routers.OrderByDescending(x => x.RouterInSystemId).Select(x => x.RouterInSystemId).FirstOrDefault();
             Router router = new Router("router" + ++lastRouterIndex);
+            router.RouterInSystemId = lastRouterIndex;
             _routers.Add(router);
 
             return router;
@@ -112,6 +120,7 @@ namespace WriteRoutersToXML.Models.NetComponents
                 router.ConnectTo(currentRouter);
             }
 
+            UpdatePathsFromRouters(routers, router);
             //TODO update paths here
         }
 
@@ -150,10 +159,80 @@ namespace WriteRoutersToXML.Models.NetComponents
                     else
                     {
                         //Path is full
-                        paths.Add(currentPath);
+                        if (!IsPathContainsInList(paths, currentPath))
+                        {
+                            paths.Add(currentPath);
+                        }
                     }
                 }
             }
+        }
+
+        /* Method for updating paths after adding new node. 
+        /  Get all suppathes and continue it to new router
+        */
+        private void UpdatePathsFromRouters(List<Router> routersWithConnectionsToNewRouter, Router newRouter)
+        {
+            List<Path> paths = _allPaths.Values.SelectMany(x => x).Where(x => x.DoesPathContainsRouters(routersWithConnectionsToNewRouter)).ToList();
+
+            var linkMatrix = GetLinkMatrix();
+
+            foreach (Path path in paths)
+            {
+                Router routerStart = path.StartNode;
+                Router routerEnd = path.LastNode;
+
+                var tuple = new Tuple<Router, Router>(routerStart, routerEnd);
+                List<Path> currentPaths; //we will update this with new paths
+                if (!_allPaths.TryGetValue(tuple, out currentPaths))
+                {
+                    currentPaths = new List<Path>();
+                }
+
+                foreach (Router connectedWithNewRouter in routersWithConnectionsToNewRouter)
+                {
+                    if (connectedWithNewRouter == routerEnd) continue;  //connection to end node
+
+                    Path startPath = path.GetSubPathTo(connectedWithNewRouter);
+
+                    if (startPath == null) continue;    //there is no subpass to router
+
+                    startPath.AddNodeToPath(newRouter);
+
+                    CreateNewPath(startPath, newRouter.RouterInSystemId, path.LastNode.RouterInSystemId, currentPaths, linkMatrix);
+                }
+
+                if (_allPaths.ContainsKey(tuple))
+                {
+                    _allPaths[tuple] = currentPaths;
+                }
+                else
+                {
+                    _allPaths.Add(tuple, currentPaths);
+                }
+            }
+        }
+
+        private bool IsPathContainsInList(List<Path> paths, Path pathToCheck)
+        {
+            foreach (Path path in paths)
+            {
+                bool isPathExists = false;
+                if (path.RoutersInPath.Count != pathToCheck.RoutersInPath.Count) continue;
+                for (var i = 0; i < path.RoutersInPath.Count; i++)
+                {
+                    if (path.RoutersInPath[i] != pathToCheck.RoutersInPath[i])
+                    {
+                        isPathExists = false;
+                        break;
+                    }
+                    isPathExists = true;
+                }
+
+                if (isPathExists) return true;
+
+            }
+            return false;
         }
 
         #endregion

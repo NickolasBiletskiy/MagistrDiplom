@@ -22,6 +22,20 @@ namespace WriteRoutersToXML.Models.Routing
                 return metric / Math.Pow(RoutersInPath.Count - 1, 2);
             }
         }
+        public Router StartNode
+        {
+            get
+            {
+                return RoutersInPath[0];
+            }
+        }
+        public Router LastNode
+        {
+            get
+            {
+                return RoutersInPath[RoutersInPath.Count - 1];
+            }
+        }
 
         public Path()
         {
@@ -51,6 +65,28 @@ namespace WriteRoutersToXML.Models.Routing
             clonedPath.RoutersInPath = new List<Router>(RoutersInPath);
 
             return clonedPath;
+        }
+
+        public Path GetSubPathTo(Router router)
+        {
+            Path subPath = new Path();
+
+            var seekingRouterId = RoutersInPath.IndexOf(router);
+
+            if (seekingRouterId == -1) return null;
+
+            subPath.RoutersInPath = RoutersInPath.GetRange(0, seekingRouterId + 1);
+
+            return subPath;
+        }
+
+        public bool DoesPathContainsRouters(List<Router> routers)
+        {
+            foreach (var router in RoutersInPath)
+            {
+                if (routers.Contains(router)) return true;
+            };
+            return false;
         }
 
         #endregion
