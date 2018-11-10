@@ -26,6 +26,11 @@ namespace WriteRoutersToXML.Models.NetComponents
             Id = Guid.NewGuid();
         }
 
+        public Router(string name) : this(name, Constants.ROUTER_DEFAULT_INTERFACE_COUNT)
+        {
+
+        }
+
         public Router(string name, int numberOfInterfaces) : this()
         {
             Name = name;
@@ -47,7 +52,6 @@ namespace WriteRoutersToXML.Models.NetComponents
             foreach (Interface inter in Interfaces)
             {
                 inter.Router = this;
-                //inter.OnDeserializing();
             }
 
         }
@@ -59,11 +63,20 @@ namespace WriteRoutersToXML.Models.NetComponents
             Interface interfaceTo = anotherRouter.GetFirstFreeInterface();
             if (interfaceTo == null) throw new Exception($"There no free interfaces in {interfaceTo.Router.Name}");
 
-            //TODO change 1 with specific value
-            //remove this stub
-            Random rand = new Random();
-            interFaceFrom.CreateConnection(interfaceTo, rand.Next(1, 5));
+            interFaceFrom.CreateConnection(interfaceTo);
+        }
 
+        public Link GetLinkToRouter(Router anotherRouter)
+        {
+            foreach (var inter in Interfaces.Where(x => x.IsConnected).ToList())
+            {
+                if ((inter.Link.Interface1.Router == this && inter.Link.Interface2.Router == anotherRouter) || (inter.Link.Interface1.Router == anotherRouter && inter.Link.Interface2.Router == this))
+                {
+                    return inter.Link;
+                }
+            }
+
+            return null;
         }
 
         public Interface GetFirstFreeInterface()
@@ -71,11 +84,20 @@ namespace WriteRoutersToXML.Models.NetComponents
             return Interfaces.FirstOrDefault(x => !x.IsConnected);
         }
 
+        #region Traffic
+
+        public void GenerateTraffc(int routerTo)
+        {
+            var path = Controller.Instance.GetAllPaths(RouterInSystemId, routerTo);
+        }
+
+        #endregion
+
         #region Logging
 
         public string LogConnections()
         {
-            StringBuilder result = new StringBuilder(this.Name);
+            StringBuilder result = new StringBuilder($"{Name} routerIsSystemId={RouterInSystemId} id={Id}");
             result.Append("\n");
             Interfaces.Where(x => x.IsConnected).ToList().ForEach((inter) =>
             {

@@ -24,12 +24,12 @@ namespace WriteRoutersToXML.Models.NetComponents
         {
             get
             {
-                return Length;
+                return AvailableBandWidth;
             }
             private set { }
         }
 
-        public int Length { get; set; }
+        public int AvailableBandWidth { get; set; }
 
         #endregion
 
@@ -40,12 +40,12 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         }
 
-        public Link(Interface int1, Interface int2, int length)
+        public Link(Interface int1, Interface int2)
         {
             Interface1 = int1;
             Interface2 = int2;
             IsActive = true;
-            Length = length;
+            AvailableBandWidth = Constants.LINK_MAX_BANDWIDH;
             Name = int1.FullName + NameSplitters.INTERFACES_SPLITTER + int2.FullName;
         }
 

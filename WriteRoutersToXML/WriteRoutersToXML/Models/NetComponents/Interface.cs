@@ -46,9 +46,9 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         }
 
-        public void CreateConnection (Interface interfaceToConnect, int length)
+        public void CreateConnection (Interface interfaceToConnect)
         {            
-            Link = new Link(this, interfaceToConnect, length);
+            Link = new Link(this, interfaceToConnect);
             IsConnected = true;
 
             Console.WriteLine($"Initiated connection between {FullName}  and {interfaceToConnect.FullName}");

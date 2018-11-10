@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 using WriteRoutersToXML.Extensions;
 using WriteRoutersToXML.Models.Routing;
 using WriteRoutersToXML.Services;
@@ -13,7 +13,7 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Fields
 
-        private ICollection<Router> _routers;
+        private List<Router> _routers;
 
         //private int[,] linkMatrix;
 
@@ -53,7 +53,7 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Public Methods
 
-        public void InitializeController(ICollection<Router> routers)
+        public void InitializeController(List<Router> routers)
         {
             _routers = routers;
 
@@ -74,8 +74,8 @@ namespace WriteRoutersToXML.Models.NetComponents
             var paths = new List<Path>();
             var linkMatrix = GetLinkMatrix();
 
-            Path startPath = new Path(_routers.FirstOrDefault(x=>x.RouterInSystemId == routerFrom));
- 
+            Path startPath = new Path(_routers.FirstOrDefault(x => x.RouterInSystemId == routerFrom));
+
             CreateNewPath(startPath, routerFrom, routerTo, paths, linkMatrix);
 
             _allPaths.Add(tuple, paths);
@@ -86,6 +86,33 @@ namespace WriteRoutersToXML.Models.NetComponents
             });
 
             return _allPaths[tuple];
+        }
+
+        public void GetAllConnections()
+        {
+            LoggerService.Instance.CustomizeOutput(LogType.ControllerLog, LogInitializing);
+
+            LoggerService.Instance.CustomizeOutput(LogType.RouterLog, LogRouterConnections);
+        }
+
+        public Router AddNewRouter()
+        {
+            int lastRouterIndex = _routers.OrderByDescending(x => x.RouterInSystemId).Select(x => x.RouterInSystemId).FirstOrDefault();
+            Router router = new Router("router" + ++lastRouterIndex);
+            _routers.Add(router);
+
+            return router;
+        }
+
+        public void CreateConnectionsForRouter(Router router, params int[] routerInSystemsIds)
+        {
+            List<Router> routers = _routers.Where(x => routerInSystemsIds.Contains(x.RouterInSystemId)).ToList();
+            foreach (Router currentRouter in routers)
+            {
+                router.ConnectTo(currentRouter);
+            }
+
+            //TODO update paths here
         }
 
         #region Routing
@@ -103,10 +130,10 @@ namespace WriteRoutersToXML.Models.NetComponents
                     if (pathSavePoint.RoutersInPath.Contains(currentRouter))
                     {
                         continue;
-                    }                    
+                    }
 
                     if (isFirstInterface)
-                    {                        
+                    {
                         isFirstInterface = false;
                     }
                     else
@@ -185,7 +212,7 @@ namespace WriteRoutersToXML.Models.NetComponents
                     }
                     else
                     {
-                        result.Append($"\tMetric = {path.Metric} PathId = {path.PathId}");
+                        result.Append($"\tMetric = {path.Metric} {Constants.BANDWIDTH_UNITS} PathId = {path.PathId}");
                     }
                 }
                 result.Append("\n");
@@ -199,13 +226,19 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Private Methods
 
-        private int[,] GetLinkMatrix() {
+        private int[,] GetLinkMatrix()
+        {
             int[,] linkMatrix = new int[_routers.Count, _routers.Count];
 
             int routerInSystemId = 0;
+
             foreach (var router in _routers)
             {
                 router.RouterInSystemId = routerInSystemId++;
+            }
+
+            foreach (var router in _routers)
+            {
                 foreach (var inter in router.Interfaces)
                 {
                     if (inter.IsConnected)
@@ -213,7 +246,7 @@ namespace WriteRoutersToXML.Models.NetComponents
                         var anotherConnectedInterface = inter.GetAnotherConnectedInterface();
                         if (anotherConnectedInterface != null)
                         {
-                            linkMatrix[router.RouterInSystemId, anotherConnectedInterface.Router.RouterInSystemId] = inter.Link.Metric;
+                            linkMatrix[router.RouterInSystemId, anotherConnectedInterface.Router.RouterInSystemId] = 1;
                         }
                     }
                 }

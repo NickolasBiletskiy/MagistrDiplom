@@ -9,7 +9,19 @@ namespace WriteRoutersToXML.Models.Routing
         public Guid PathId;
         public List<Router> RoutersInPath;
 
-        public int Metric { get; set; }
+        //Metric = average speed / hops count
+        public double Metric
+        {
+            get
+            {
+                double metric = 0;
+                for (var i = 1; i < RoutersInPath.Count; i++)
+                {
+                    metric += RoutersInPath[i - 1].GetLinkToRouter(RoutersInPath[i]).Metric;
+                }
+                return metric / Math.Pow(RoutersInPath.Count - 1, 2);
+            }
+        }
 
         public Path()
         {
@@ -17,17 +29,17 @@ namespace WriteRoutersToXML.Models.Routing
             RoutersInPath = new List<Router>();
         }
 
-        public Path (Router startRouter) : this()
+        public Path(Router startRouter) : this()
         {
             RoutersInPath.Add(startRouter);
         }
-        
+
         #region Public methods
 
         public void AddNodeToPath(Router router)
         {
             if (!RoutersInPath.Contains(router))
-            {                
+            {
                 RoutersInPath.Add(router);
             }
         }
@@ -40,7 +52,7 @@ namespace WriteRoutersToXML.Models.Routing
 
             return clonedPath;
         }
-        
+
         #endregion
     }
 }
