@@ -109,6 +109,8 @@ namespace WriteRoutersToXML.Models.NetComponents
             router.RouterInSystemId = lastRouterIndex;
             _routers.Add(router);
 
+            UpdateRouterInSystemIds();
+
             return router;
         }
 
@@ -121,7 +123,20 @@ namespace WriteRoutersToXML.Models.NetComponents
             }
 
             UpdatePathsFromRouters(routers, router);
-            //TODO update paths here
+        }
+
+        public void RemoveRouter(int routerInSystemID)
+        {
+            Console.WriteLine($"Initiated removing router {routerInSystemID}");
+            Router router = _routers.FirstOrDefault(x => x.RouterInSystemId == routerInSystemID);
+
+            router.RemoveConnections();
+            _routers.Remove(router);
+
+            RemoveAllPathsContainingRouter(router);
+
+
+            UpdateRouterInSystemIds();
         }
 
         #region Routing
@@ -233,6 +248,40 @@ namespace WriteRoutersToXML.Models.NetComponents
 
             }
             return false;
+        }
+
+        private void RemoveAllPathsContainingRouter(Router router)
+        {
+            Console.WriteLine($"Removing all paths containing {router.RouterInSystemId}");
+
+            for (var i = 0; i < _allPaths.Keys.Count; i++)
+            {
+                var key = _allPaths.Keys.ToList()[i];
+                var pathsForKey = _allPaths[key];
+
+                var pathsWhichContainsRouter = pathsForKey.Where(x => x.DoesPathContainsRouter(router)).ToList();
+                if (pathsWhichContainsRouter.Count != 0)
+                {
+                    _allPaths[key] = pathsForKey.Except(pathsWhichContainsRouter).ToList();
+                }
+            }
+
+            foreach (var pathKeyValuePair in _allPaths)
+            {
+                var pathsWhichContainsRouter = pathKeyValuePair.Value.Where(x => x.DoesPathContainsRouter(router)).ToList();
+                if (pathsWhichContainsRouter.Count != 0)
+                {
+                    _allPaths[pathKeyValuePair.Key] = pathKeyValuePair.Value.Except(pathsWhichContainsRouter).ToList();
+                }
+            }
+        }
+
+        private void UpdateRouterInSystemIds()
+        {
+            for (var routerId = 0; routerId < _routers.Count; routerId++)
+            {
+                _routers[routerId].RouterInSystemId = routerId;
+            }
         }
 
         #endregion

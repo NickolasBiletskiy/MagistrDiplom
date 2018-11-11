@@ -66,6 +66,14 @@ namespace WriteRoutersToXML.Models.NetComponents
             interFaceFrom.CreateConnection(interfaceTo);
         }
 
+        public void RemoveConnections()
+        {
+            foreach (Interface inter in Interfaces.Where(x=>x.IsConnected).ToList())
+            {
+                inter.RemoveConnection();
+            }
+        }
+
         public Link GetLinkToRouter(Router anotherRouter)
         {
             foreach (var inter in Interfaces.Where(x => x.IsConnected).ToList())

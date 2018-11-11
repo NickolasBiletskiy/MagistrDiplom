@@ -89,6 +89,11 @@ namespace WriteRoutersToXML.Models.Routing
             return false;
         }
 
+        public bool DoesPathContainsRouter (Router router)
+        {
+            return RoutersInPath.Contains(router);
+        }
+
         #endregion
     }
 }

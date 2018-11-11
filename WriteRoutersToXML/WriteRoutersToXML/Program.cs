@@ -55,6 +55,7 @@ namespace WriteRoutersToXML
                 Console.WriteLine("1. Get all paths");
                 Console.WriteLine("2. Show connections");
                 Console.WriteLine("3. Add router");
+                Console.WriteLine("4. Remove router");
                 Console.WriteLine("0. Finish program");
 
                 int userChoice;
@@ -73,6 +74,9 @@ namespace WriteRoutersToXML
                         break;
                     case 3:
                         AddRouterAndCreateConnection();
+                        break;
+                    case 4:
+                        RemoveRouter();
                         break;
                     case 0:
                         isContinue = false;
@@ -131,6 +135,21 @@ namespace WriteRoutersToXML
             Controller.Instance.CreateConnectionsForRouter(router, routersToConnectIds.ToArray());
 
             Controller.Instance.GetAllConnections();
+        }
+
+        static void RemoveRouter()
+        {
+            Console.WriteLine("Remove router");
+
+            int routerId;
+            while (!int.TryParse(Console.ReadLine(), out routerId))
+            {
+                Console.WriteLine("please enter integer");
+            };
+
+            Controller.Instance.RemoveRouter(routerId);
+
+            Console.WriteLine("Successfully removed router \n");
         }
 
         #endregion

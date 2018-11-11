@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
+using WriteRoutersToXML.Extensions;
 using WriteRoutersToXML.Helpers;
 using WriteRoutersToXML.Models.Interfaces;
 
@@ -54,6 +55,13 @@ namespace WriteRoutersToXML.Models.NetComponents
             Console.WriteLine($"Initiated connection between {FullName}  and {interfaceToConnect.FullName}");
 
             interfaceToConnect.SubmitConnection(Link);
+        }
+
+        public void RemoveConnection()
+        {
+            var connectedInterace = this.GetAnotherConnectedInterface();
+            connectedInterace.IsConnected = IsConnected = false;
+            connectedInterace.Link = Link = null;
         }
 
         public void SubmitConnection(Link link)
