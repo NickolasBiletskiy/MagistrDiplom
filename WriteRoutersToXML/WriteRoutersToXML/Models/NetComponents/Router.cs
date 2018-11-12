@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using WriteRoutersToXML.Models.Interfaces;
+using WriteRoutersToXML.Models.Routing;
+using WriteRoutersToXML.Models.SystemSimulation;
 
 namespace WriteRoutersToXML.Models.NetComponents
 {
@@ -16,6 +20,12 @@ namespace WriteRoutersToXML.Models.NetComponents
         public string Name { get; set; }
         public Interface[] Interfaces { get; set; }
         public bool IsActive { get; set; }
+
+        [XmlIgnore]
+        public List<Packet> CashedPackets = new List<Packet>();
+
+        [XmlIgnore]
+        public List<RoutingTableItem> RoutingTable = new List<RoutingTableItem>();  //destination router, first router in the path
 
         #endregion
 
@@ -94,9 +104,39 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Traffic
 
-        public void GenerateTraffc(int routerTo)
+        public void SendPackets()
         {
-            var path = Controller.Instance.GetAllPaths(RouterInSystemId, routerTo);
+            var packetTrafficGroups = CashedPackets.GroupBy(x => x.Traffic).ToList();
+            foreach (var trafficPackets in packetTrafficGroups)
+            {
+                var packetToSend = trafficPackets.ToList().FirstOrDefault(x => x.IsSending);
+                if (packetToSend == null) {
+                    packetToSend = trafficPackets.ToList().FirstOrDefault();
+                    packetToSend.CurrentRouter = this;
+                    packetToSend.IsSending = true;
+                    packetToSend.SendingToRouter = GetNextTransitionRouter(packetToSend.Traffic.DestinationRouter);
+                }
+
+                
+            }
+        }
+
+        public Router GetNextTransitionRouter(Router destinationRouter)
+        {
+            var closestRouterRoutingItem = RoutingTable.FirstOrDefault(x => x.DestinationRouter == destinationRouter);
+            if (closestRouterRoutingItem == null || closestRouterRoutingItem.IsExpired)
+            {
+                if (closestRouterRoutingItem != null) RoutingTable.Remove(closestRouterRoutingItem);
+                closestRouterRoutingItem = new RoutingTableItem
+                {
+                    ClosestRouter = Controller.Instance.GetClothestRouter(this, destinationRouter),
+                    DestinationRouter = destinationRouter,
+                    LastPathUpdateTS = DateTime.UtcNow
+                };
+                RoutingTable.Add(closestRouterRoutingItem);
+            }
+
+            return closestRouterRoutingItem.ClosestRouter;
         }
 
         #endregion

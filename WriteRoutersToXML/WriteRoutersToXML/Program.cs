@@ -40,7 +40,8 @@ namespace WriteRoutersToXML
 
                 Controller.Instance.InitializeController(routers.ToList());
 
-                HandleUserInput();
+                HandleUserInput();                       
+
             }
 
         }
@@ -56,6 +57,8 @@ namespace WriteRoutersToXML
                 Console.WriteLine("2. Show connections");
                 Console.WriteLine("3. Add router");
                 Console.WriteLine("4. Remove router");
+                Console.WriteLine("5. Generate traffic");
+                Console.WriteLine("6. Start simulation");
                 Console.WriteLine("0. Finish program");
 
                 int userChoice;
@@ -77,6 +80,12 @@ namespace WriteRoutersToXML
                         break;
                     case 4:
                         RemoveRouter();
+                        break;
+                    case 5:
+                        GenerateTraffic();
+                        break;
+                    case 6:
+                        StartSimulations();
                         break;
                     case 0:
                         isContinue = false;
@@ -150,6 +159,55 @@ namespace WriteRoutersToXML
             Controller.Instance.RemoveRouter(routerId);
 
             Console.WriteLine("Successfully removed router \n");
+        }
+
+        static void GenerateTraffic()
+        {
+            Console.WriteLine("Generate traffic");
+
+            Console.WriteLine("Enter router from id");
+            int routerFromid;
+            while (!int.TryParse(Console.ReadLine(), out routerFromid))
+            {
+                Console.WriteLine("please enter integer");
+            };
+
+            Console.WriteLine("Enter router to id");
+            int routerToid;
+            while (!int.TryParse(Console.ReadLine(), out routerToid))
+            {
+                Console.WriteLine("please enter integer");
+            };
+
+            Console.WriteLine("Enter number of packets");
+            int numberOfPackets;
+            while (!int.TryParse(Console.ReadLine(), out numberOfPackets))
+            {
+                Console.WriteLine("please enter integer");
+            };
+            
+            Console.WriteLine("Enter size of packets in MBits");
+            int sizeOfPackets;
+            while (!int.TryParse(Console.ReadLine(), out sizeOfPackets))
+            {
+                Console.WriteLine("please enter integer");
+            };
+
+            Console.WriteLine("Enter desired speed in MBits/s");
+            int desiredSpeed;
+            while (!int.TryParse(Console.ReadLine(), out desiredSpeed))
+            {
+                Console.WriteLine("please enter valid integer");
+            };
+
+            Controller.Instance.InitTraffic(routerFromid, routerToid, numberOfPackets, sizeOfPackets, desiredSpeed);
+
+        }
+
+        static void StartSimulations()
+        {
+            Controller.Instance.InitSimulation();
+            Controller.Instance.StartSimulation();
         }
 
         #endregion

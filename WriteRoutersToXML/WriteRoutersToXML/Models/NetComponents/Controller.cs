@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using WriteRoutersToXML.Extensions;
 using WriteRoutersToXML.Models.Routing;
+using WriteRoutersToXML.Models.SystemSimulation;
 using WriteRoutersToXML.Services;
+
 
 namespace WriteRoutersToXML.Models.NetComponents
 {
@@ -15,7 +17,9 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         private List<Router> _routers;
 
-        //private int[,] linkMatrix;
+        private List<Traffic> _activeTraffic;
+
+        private SystemSimulator _systemSimulator;
 
         //dictionary for saving allpahts between points. Key -> Tuple(nodeFrom, nodeTo), Value - List<Path>
         private Dictionary<Tuple<Router, Router>, List<Path>> _allPaths = new Dictionary<Tuple<Router, Router>, List<Path>>();
@@ -46,7 +50,7 @@ namespace WriteRoutersToXML.Models.NetComponents
         //private constructor for singleton
         private Controller()
         {
-
+            _activeTraffic = new List<Traffic>();
         }
 
         #endregion
@@ -93,6 +97,30 @@ namespace WriteRoutersToXML.Models.NetComponents
             });
 
             return _allPaths[tuple];
+        }
+
+        public Router GetClothestRouter(Router routerFrom, Router routerTo)
+        {
+            Tuple<Router, Router> searchTuple = new Tuple<Router, Router>(routerFrom, routerTo);
+            List<Path> paths;
+
+            Path bestPath = null;
+            if (_allPaths.TryGetValue(searchTuple, out paths))
+            {
+                bestPath = paths.OrderByDescending(x => x.Metric).FirstOrDefault();
+            }
+            else
+            {
+                bestPath = GetAllPaths(routerFrom.RouterInSystemId, routerTo.RouterInSystemId).OrderByDescending(x => x.Metric).FirstOrDefault();
+            }
+
+            if(bestPath.RoutersInPath.Count > 1)
+            {
+                return bestPath.RoutersInPath[1];
+            }
+
+
+            return bestPath.RoutersInPath[0];
         }
 
         public void GetAllConnections()
@@ -282,6 +310,39 @@ namespace WriteRoutersToXML.Models.NetComponents
             {
                 _routers[routerId].RouterInSystemId = routerId;
             }
+        }
+
+        #endregion
+
+        #region Traffic
+
+        public void InitTraffic(int routerFromid, int routerToid, int numberOfPackets, int sizeOfPackets, int desiredSpeed)
+        {
+            Router routerFrom = _routers.FirstOrDefault(x => x.RouterInSystemId == routerFromid);
+            Router routerTo = _routers.FirstOrDefault(x => x.RouterInSystemId == routerToid);
+
+            if (routerFrom == null || routerTo == null) return;
+
+            Traffic traffic = new Traffic(routerFrom, routerTo, numberOfPackets, sizeOfPackets, desiredSpeed);
+
+            _activeTraffic.Add(traffic);
+
+            routerFrom.CashedPackets.AddRange(traffic.Packets);
+        }
+
+        public void InitSimulation()
+        {
+            _systemSimulator = new SystemSimulator(_routers);
+        }
+
+        public void StartSimulation()
+        {
+            _systemSimulator.IsPaused = false;
+        }
+
+        public void PauseSimulation()
+        {
+            _systemSimulator.IsPaused = true;
         }
 
         #endregion

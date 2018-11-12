@@ -20,6 +20,9 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         public bool IsConnected { get; set; }
 
+        [XmlIgnore]
+        public bool IsBusy { get; set; }
+
         public Link Link { get; set; }
 
         #endregion
@@ -36,6 +39,7 @@ namespace WriteRoutersToXML.Models.NetComponents
             Router = router;
             Name = $"Int{interfaceNumber}";
             FullName = router.Name + NameSplitters.ROUTERS_SPLITTER + Name;
+            IsBusy = false;
         }
 
         #endregion
