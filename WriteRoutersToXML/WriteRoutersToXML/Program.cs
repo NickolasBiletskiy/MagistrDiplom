@@ -200,7 +200,10 @@ namespace WriteRoutersToXML
                 Console.WriteLine("please enter valid integer");
             };
 
-            Controller.Instance.InitTraffic(routerFromid, routerToid, numberOfPackets, sizeOfPackets, desiredSpeed);
+            Console.WriteLine("Enter traffic name");
+            string trafficName = Console.ReadLine();
+
+            Controller.Instance.InitTraffic(routerFromid, routerToid, numberOfPackets, sizeOfPackets, desiredSpeed, trafficName);
 
         }
 

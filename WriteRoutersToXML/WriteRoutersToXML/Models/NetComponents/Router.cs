@@ -25,6 +25,9 @@ namespace WriteRoutersToXML.Models.NetComponents
         public List<Packet> CashedPackets = new List<Packet>();
 
         [XmlIgnore]
+        public List<Packet> ReceivedPackets = new List<Packet>();
+
+        [XmlIgnore]
         public List<RoutingTableItem> RoutingTable = new List<RoutingTableItem>();  //destination router, first router in the path
 
         #endregion
@@ -78,7 +81,7 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         public void RemoveConnections()
         {
-            foreach (Interface inter in Interfaces.Where(x=>x.IsConnected).ToList())
+            foreach (Interface inter in Interfaces.Where(x => x.IsConnected).ToList())
             {
                 inter.RemoveConnection();
             }
@@ -109,15 +112,51 @@ namespace WriteRoutersToXML.Models.NetComponents
             var packetTrafficGroups = CashedPackets.GroupBy(x => x.Traffic).ToList();
             foreach (var trafficPackets in packetTrafficGroups)
             {
-                var packetToSend = trafficPackets.ToList().FirstOrDefault(x => x.IsSending);
-                if (packetToSend == null) {
+                var packetToSend = trafficPackets.ToList().FirstOrDefault(x => x.IsSending && !x.IsTransmitted);
+                if (packetToSend == null)
+                {
                     packetToSend = trafficPackets.ToList().FirstOrDefault();
                     packetToSend.CurrentRouter = this;
                     packetToSend.IsSending = true;
                     packetToSend.SendingToRouter = GetNextTransitionRouter(packetToSend.Traffic.DestinationRouter);
+                    packetToSend.Link = GetLinkToRouter(packetToSend.SendingToRouter);
+                    packetToSend.Speed = Math.Min(packetToSend.Link.AvailableBandWidth, packetToSend.Traffic.DesiredBandWidth);
+
+                    packetToSend.Link.AvailableBandWidth -= packetToSend.Speed;
                 }
 
-                
+                //send here
+                packetToSend.Progress += 100 * (packetToSend.Speed * (double)Constants.UPDATE_TIME / 1000) / packetToSend.Size; //convert to seconds
+                Console.WriteLine($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
+
+                // check packet is sent
+                if (packetToSend.Progress >= 100)
+                {
+                    CashedPackets.Remove(packetToSend);
+                    
+                    packetToSend.IsSending =  false;
+                    packetToSend.Progress = 0;
+
+                    packetToSend.Link.AvailableBandWidth += packetToSend.Speed;
+                    packetToSend.Link = null;
+                    packetToSend.Speed = 0;
+
+                    //packet came to final router
+                    if (packetToSend.SendingToRouter == packetToSend.Traffic.DestinationRouter)
+                    {
+                        Console.WriteLine($"Packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} received destination router.");
+                        packetToSend.IsTransmitted = true;
+                        packetToSend.Traffic.TransmittedPackets.Add(packetToSend);
+                        packetToSend.SendingToRouter.ReceivedPackets.Add(packetToSend);
+                    }
+                    else
+                    {
+                        packetToSend.SendingToRouter.CashedPackets.Add(packetToSend);
+                    }
+                }
+
+
+
             }
         }
 

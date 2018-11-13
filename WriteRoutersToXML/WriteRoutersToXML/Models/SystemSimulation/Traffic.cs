@@ -10,6 +10,7 @@ namespace WriteRoutersToXML.Models.SystemSimulation
         public Router DestinationRouter { get; set; }
         public List<Packet> Packets { get; set; }
         public int DesiredBandWidth { get; set; }
+        public string Name { get; set; }
         public List<Packet> TransmittedPackets
         {
             get
@@ -20,17 +21,18 @@ namespace WriteRoutersToXML.Models.SystemSimulation
 
         #region cstor
 
-        public Traffic(Router routerFrom, Router routerTo, int numberOfPackets, int sizeOfPackets, int desiredSpeed)
+        public Traffic(Router routerFrom, Router routerTo, int numberOfPackets, int sizeOfPackets, int desiredSpeed, string name)
         {
             InitiatorRouter = routerFrom;
             DestinationRouter = routerTo;
             DesiredBandWidth = desiredSpeed;
-            Packets = Enumerable.Repeat(new Packet
-            (
-                this,
-                sizeOfPackets,
-                InitiatorRouter                
-            ), numberOfPackets).ToList();
+            Packets = new List<Packet>();
+
+            for (var i = 0; i < numberOfPackets; i++)
+            {
+                Packets.Add(new Packet(this, sizeOfPackets, InitiatorRouter, i));
+            }
+            Name = name;
         }
 
         #endregion

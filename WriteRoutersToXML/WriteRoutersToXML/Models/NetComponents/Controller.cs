@@ -316,14 +316,14 @@ namespace WriteRoutersToXML.Models.NetComponents
 
         #region Traffic
 
-        public void InitTraffic(int routerFromid, int routerToid, int numberOfPackets, int sizeOfPackets, int desiredSpeed)
+        public void InitTraffic(int routerFromid, int routerToid, int numberOfPackets, int sizeOfPackets, int desiredSpeed, string trafficName)
         {
             Router routerFrom = _routers.FirstOrDefault(x => x.RouterInSystemId == routerFromid);
             Router routerTo = _routers.FirstOrDefault(x => x.RouterInSystemId == routerToid);
 
             if (routerFrom == null || routerTo == null) return;
 
-            Traffic traffic = new Traffic(routerFrom, routerTo, numberOfPackets, sizeOfPackets, desiredSpeed);
+            Traffic traffic = new Traffic(routerFrom, routerTo, numberOfPackets, sizeOfPackets, desiredSpeed, trafficName);
 
             _activeTraffic.Add(traffic);
 
