@@ -1,0 +1,33 @@
+﻿<Window x:Class="RoutingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RoutingApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="1000" MaxWidth="1300" MaxHeight="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="3"></ColumnDefinition>
+            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Background="Bisque" FlowDirection="LeftToRight" Margin="0,0,0,0">
+          
+        </StackPanel>
+        <ScrollViewer Grid.Column="0" Grid.Row="1" Background="Blue" VerticalScrollBarVisibility="Auto"></ScrollViewer>
+
+        <GridSplitter Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ></GridSplitter>
+        <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
+            <TextBox x:Name="ConsoleOutput" TextWrapping="WrapWithOverflow" VerticalScrollBarVisibility="Auto"></TextBox>
+        </Grid>
+
+
+    </Grid>
+</Window>

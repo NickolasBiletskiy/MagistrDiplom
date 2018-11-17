@@ -1,0 +1,15 @@
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\bin\Debug\RoutingApp.exe.config
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\bin\Debug\RoutingApp.exe
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\bin\Debug\RoutingApp.pdb
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.csprojAssemblyReference.cache
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\MainWindow.g.cs
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\App.g.cs
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp_MarkupCompile.cache
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp_MarkupCompile.lref
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\MainWindow.baml
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.g.resources
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.Properties.Resources.resources
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.csproj.GenerateResource.cache
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.csproj.CoreCompileInputs.cache
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.exe
+B:\DiplomProject\WriteRoutersToXML\RoutingApp\obj\Debug\RoutingApp.pdb
