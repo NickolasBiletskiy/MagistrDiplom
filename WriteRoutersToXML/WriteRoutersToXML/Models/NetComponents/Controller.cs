@@ -64,40 +64,7 @@ namespace WriteRoutersToXML.Models.NetComponents
             LoggerService.Instance.CustomizeOutput(LogType.ControllerLog, LogInitializing);
 
             LoggerService.Instance.CustomizeOutput(LogType.RouterLog, LogRouterConnections);
-        }
-
-        public List<Path> GetAllPaths(int routerFrom, int routerTo)
-        {
-            Router routerStart = _routers.FirstOrDefault(x => x.RouterInSystemId == routerFrom);
-            Router routerEnd = _routers.FirstOrDefault(x => x.RouterInSystemId == routerTo);
-
-            var tuple = new Tuple<Router, Router>(routerStart, routerEnd);
-            List<Path> currentPaths;
-            if (_allPaths.TryGetValue(tuple, out currentPaths))
-            {
-                LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
-                {
-                    LogPaths(routerFrom, routerTo, currentPaths);
-                });
-                return currentPaths;
-            }
-
-            var paths = new List<Path>();
-            var linkMatrix = GetLinkMatrix();
-
-            Path startPath = new Path(_routers.FirstOrDefault(x => x.RouterInSystemId == routerFrom));
-
-            CreateNewPath(startPath, routerFrom, routerTo, paths, linkMatrix);
-
-            _allPaths.Add(tuple, paths);
-
-            LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
-            {
-                LogPaths(routerFrom, routerTo, _allPaths[tuple]);
-            });
-
-            return _allPaths[tuple];
-        }
+        }                         
 
         public Router GetClothestRouter(Router routerFrom, Router routerTo)
         {
@@ -114,7 +81,7 @@ namespace WriteRoutersToXML.Models.NetComponents
                 bestPath = GetAllPaths(routerFrom.RouterInSystemId, routerTo.RouterInSystemId).OrderByDescending(x => x.Metric).FirstOrDefault();
             }
 
-            if(bestPath.RoutersInPath.Count > 1)
+            if (bestPath.RoutersInPath.Count > 1)
             {
                 return bestPath.RoutersInPath[1];
             }
@@ -168,6 +135,59 @@ namespace WriteRoutersToXML.Models.NetComponents
         }
 
         #region Routing
+
+        public List<Path> GetAllPaths(int routerFrom, int routerTo)
+        {
+            Router routerStart = _routers.FirstOrDefault(x => x.RouterInSystemId == routerFrom);
+            Router routerEnd = _routers.FirstOrDefault(x => x.RouterInSystemId == routerTo);
+
+            var tuple = new Tuple<Router, Router>(routerStart, routerEnd);
+            List<Path> currentPaths;
+            if (_allPaths.TryGetValue(tuple, out currentPaths))
+            {
+                LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
+                {
+                    LogPaths(routerFrom, routerTo, currentPaths);
+                });
+                return currentPaths;
+            }
+
+            var paths = new List<Path>();
+            var linkMatrix = GetLinkMatrix();
+
+            Path startPath = new Path(_routers.FirstOrDefault(x => x.RouterInSystemId == routerFrom));
+
+            CreateNewPath(startPath, routerFrom, routerTo, paths, linkMatrix);
+
+            _allPaths.Add(tuple, paths);
+
+            //fill alternative paths
+            FillReversePaths(tuple, paths);
+
+            LoggerService.Instance.CustomizeOutput(LogType.Paths, () =>
+            {
+                LogPaths(routerFrom, routerTo, _allPaths[tuple]);
+            });
+
+            return _allPaths[tuple];
+        }
+
+        public void FillReversePaths(Tuple<Router, Router> routerPair, List<Path> paths)
+        {
+            var reverseTuple = new Tuple<Router, Router>(routerPair.Item2, routerPair.Item1);
+            List<Path> reversePaths;
+
+            //if such paths are not yet calculated
+            if (!_allPaths.TryGetValue(reverseTuple, out reversePaths))
+            {
+                reversePaths = new List<Path>();
+                foreach (Path path in paths)
+                {
+                    reversePaths.Add(path.GetReversePath());
+                }
+                _allPaths.Add(reverseTuple, reversePaths);
+            }
+        }
 
         private void CreateNewPath(Path path, int currentNode, int lastNode, List<Path> paths, int[,] linkMatrix)
         {

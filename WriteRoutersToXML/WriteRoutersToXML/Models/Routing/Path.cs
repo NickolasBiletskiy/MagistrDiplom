@@ -80,6 +80,16 @@ namespace WriteRoutersToXML.Models.Routing
             return subPath;
         }
 
+        public Path GetReversePath()
+        {
+            var reversePath = new Path(RoutersInPath[RoutersInPath.Count - 1]);
+            for (var i = RoutersInPath.Count - 2; i >= 0; i--)
+            {
+                reversePath.AddNodeToPath(RoutersInPath[i]);
+            }
+            return reversePath;
+        }
+
         public bool DoesPathContainsRouters(List<Router> routers)
         {
             foreach (var router in RoutersInPath)
@@ -89,7 +99,7 @@ namespace WriteRoutersToXML.Models.Routing
             return false;
         }
 
-        public bool DoesPathContainsRouter (Router router)
+        public bool DoesPathContainsRouter(Router router)
         {
             return RoutersInPath.Contains(router);
         }
