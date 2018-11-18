@@ -106,6 +106,7 @@ namespace RoutingApp.Core.Services
             {
                 Application.Current.Dispatcher.Invoke(new Action(() => {
                     OutPutTextBox.Text += message + "\n";
+                    //OutPutTextBox.ScrollToEnd();
                     //OutPutTextBox.Text += ;
                 }), DispatcherPriority.ContextIdle);              
             }

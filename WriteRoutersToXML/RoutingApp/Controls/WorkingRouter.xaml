@@ -1,0 +1,24 @@
+﻿<Button x:Class="RoutingApp.Controls.WorkingRouter"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RoutingApp.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Height="77" Width="77" Margin="0 0 0 0" Background="Transparent"
+             BorderBrush="Transparent"  BorderThickness="0"     
+            Canvas.Left="{Binding ElementName=Router, Path=PositionX, Mode=TwoWay}"
+            Canvas.Top="{Binding ElementName=Router, Path=PositionY, Mode=TwoWay}"
+            PreviewMouseDown="Control_MouseLeftButtonDown"
+        PreviewMouseUp="Control_MouseLeftButtonUp"
+        PreviewMouseMove="Control_MouseMove">
+
+    <Image Source="../Images/routerIcon.png"
+                       Height="75"
+                        Width="75"
+                        Margin="0">
+    </Image>
+
+</Button>
+
+<!---->

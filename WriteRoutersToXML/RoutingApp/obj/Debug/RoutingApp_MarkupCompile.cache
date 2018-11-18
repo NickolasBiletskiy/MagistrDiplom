@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 B:\DiplomProject\WriteRoutersToXML\RoutingApp\App.xaml
-11151548125
+21106269548
 
-202140053761
+211463480117
 14-799888181
-MainWindow.xaml;
+Controls\WorkingRouter.xaml;MainWindow.xaml;
 
 False
 

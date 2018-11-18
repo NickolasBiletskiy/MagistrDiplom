@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <ArrayOfRouter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Router>
-    <Id>5a6bf342-cb90-4ffe-9ae0-8a92bea55694</Id>
+    <Id>f8d6bd84-68ed-4d2d-89db-44657564133b</Id>
     <RouterInSystemId>0</RouterInSystemId>
     <Name>router0</Name>
     <Interfaces>
@@ -42,10 +42,12 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
+    <PositionX>362.19999999999993</PositionX>
+    <PositionY>201</PositionY>
   </Router>
   <Router>
-    <Id>71e9e120-264d-4946-ae4c-13388ac2ef70</Id>
-    <RouterInSystemId>0</RouterInSystemId>
+    <Id>b1bba6d6-9e70-4843-bb3d-28e7565b75a4</Id>
+    <RouterInSystemId>1</RouterInSystemId>
     <Name>router1</Name>
     <Interfaces>
       <Interface>
@@ -85,10 +87,12 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
+    <PositionX>289</PositionX>
+    <PositionY>29</PositionY>
   </Router>
   <Router>
-    <Id>a73d46fb-8118-4a71-b606-b743a79e7530</Id>
-    <RouterInSystemId>0</RouterInSystemId>
+    <Id>53af82f0-b64c-4b00-bbea-b86307abaa7e</Id>
+    <RouterInSystemId>2</RouterInSystemId>
     <Name>router2</Name>
     <Interfaces>
       <Interface>
@@ -133,10 +137,12 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
+    <PositionX>178</PositionX>
+    <PositionY>208</PositionY>
   </Router>
   <Router>
-    <Id>752c98bd-d683-470f-9c0b-9db5fd39dd67</Id>
-    <RouterInSystemId>0</RouterInSystemId>
+    <Id>58c91f3d-e3c3-4094-9368-24a83818c193</Id>
+    <RouterInSystemId>3</RouterInSystemId>
     <Name>router3</Name>
     <Interfaces>
       <Interface>
@@ -176,10 +182,12 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
+    <PositionX>133</PositionX>
+    <PositionY>80</PositionY>
   </Router>
   <Router>
-    <Id>a12f91fd-baae-4ddc-8483-919dbcc9543e</Id>
-    <RouterInSystemId>0</RouterInSystemId>
+    <Id>d390cfd3-63e4-4021-be16-16973deccae0</Id>
+    <RouterInSystemId>4</RouterInSystemId>
     <Name>router4</Name>
     <Interfaces>
       <Interface>
@@ -224,5 +232,7 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
+    <PositionX>396</PositionX>
+    <PositionY>75</PositionY>
   </Router>
 </ArrayOfRouter>

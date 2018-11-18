@@ -22,6 +22,10 @@ namespace RoutingApp.Core.Models.NetComponents
         public Interface[] Interfaces { get; set; }
         public bool IsActive { get; set; }
 
+        //Position on canvas
+        public double PositionX { get; set; }
+        public double PositionY { get; set; }
+
         [XmlIgnore]
         public List<Packet> CashedPackets = new List<Packet>();
 

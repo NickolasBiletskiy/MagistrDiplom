@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\WorkingRouter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,6 +67,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\WorkingRouter.xaml.cs">
+      <DependentUpon>WorkingRouter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Extensions\InterfaceExtensions.cs" />
@@ -111,7 +118,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="routers.xml" />
+    <Resource Include="Images\open-file-icon.png" />
+    <Resource Include="Images\SaveButton.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\addRouterIcon1.png" />
+    <Resource Include="Images\routerIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

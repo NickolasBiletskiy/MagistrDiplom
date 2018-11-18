@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RoutingApp"
+        xmlns:Control="clr-namespace:RoutingApp.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="1000" MaxWidth="1300" MaxHeight="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="90"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -18,10 +19,33 @@
             <ColumnDefinition Width="0.2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.Row="0" Background="Bisque" FlowDirection="LeftToRight" Margin="0,0,0,0">
-          
+        <StackPanel Grid.Column="0" Grid.Row="0"                   
+                    FlowDirection="LeftToRight" 
+                    Margin="0,0,0,0"                                      
+                    Background="White"
+                    Orientation="Horizontal">
+            <GroupBox x:Name="saveOpenGroup">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnSaveToFile" Width="70" Height="70" Margin="0 0 10 0" BorderThickness="0" Background="Transparent" Click="btnSaveToFile_Click">
+                        <Image Source="Images/SaveButton.ico"></Image>
+                    </Button>
+                    <Button x:Name="btnLoadFromFile" Width="70" Height="70" BorderThickness="0" Background="Transparent" Click="btnLoadFromFile_Click">
+                        <Image Source="Images/open-file-icon.png"></Image>
+                    </Button>
+                </StackPanel>
+            </GroupBox>
+            <Button x:Name="btnAddRouter" Height="65" Width="86" Margin="0 20 0 0" BorderThickness="0" Background="Transparent" Click="btnAddRouter_Click">
+                <Image Source="Images/addRouterIcon1.png"
+                       Height="60"
+                        Width="82">                
+                </Image>
+            </Button>
         </StackPanel>
-        <ScrollViewer Grid.Column="0" Grid.Row="1" Background="Blue" VerticalScrollBarVisibility="Auto"></ScrollViewer>
+        <ScrollViewer Grid.Column="0" Grid.Row="1" Background="AntiqueWhite" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Canvas Width="3000" Height="3000" x:Name="WorkingArea">
+                <!--<Control:WorkingRouter Canvas.Left="10" Canvas.Top="10"></Control:WorkingRouter>-->
+            </Canvas>
+        </ScrollViewer>
 
         <GridSplitter Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ></GridSplitter>
         <Grid Grid.Column="2" Grid.Row="1" Background="Beige">

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using RoutingApp.Core.Extensions;
 using RoutingApp.Core.Models.Routing;
 using RoutingApp.Core.Models.SystemSimulation;
@@ -357,7 +358,7 @@ namespace RoutingApp.Core.Models.NetComponents
 
         public void StartSimulation()
         {
-            _systemSimulator.IsPaused = false;
+            Task.Run(() => {_systemSimulator.IsPaused = false; });
         }
 
         public void PauseSimulation()
