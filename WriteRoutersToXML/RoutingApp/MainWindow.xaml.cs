@@ -92,6 +92,9 @@ namespace RoutingApp
 
         private void btnAddRouter_Click(object sender, RoutedEventArgs e)
         {
+            var router = Controller.Instance.AddNewRouter();
+            WorkingRouter routerControl = new WorkingRouter(router);
+            WorkingArea.Children.Add(routerControl);
             var a = 5;
         }
 

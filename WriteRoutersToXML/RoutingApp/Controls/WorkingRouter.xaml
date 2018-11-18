@@ -6,9 +6,7 @@
              xmlns:local="clr-namespace:RoutingApp.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Height="77" Width="77" Margin="0 0 0 0" Background="Transparent"
-             BorderBrush="Transparent"  BorderThickness="0"     
-            Canvas.Left="{Binding ElementName=Router, Path=PositionX, Mode=TwoWay}"
-            Canvas.Top="{Binding ElementName=Router, Path=PositionY, Mode=TwoWay}"
+             BorderBrush="Transparent"  BorderThickness="0"  
             PreviewMouseDown="Control_MouseLeftButtonDown"
         PreviewMouseUp="Control_MouseLeftButtonUp"
         PreviewMouseMove="Control_MouseMove">
@@ -17,6 +15,9 @@
                        Height="75"
                         Width="75"
                         Margin="0">
+        <Image.ToolTip>
+            <ToolTip Name="RouterToolTip"></ToolTip>
+        </Image.ToolTip>
     </Image>
 
 </Button>

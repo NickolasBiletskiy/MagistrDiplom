@@ -23,6 +23,9 @@ namespace RoutingApp.Controls
         public WorkingRouter(Router router) : this()
         {
             this.Router = router;
+            var toolTip = this.FindName("RouterToolTip") as ToolTip;
+
+            toolTip.Content = Router.Name;
         }
 
         public WorkingRouter()

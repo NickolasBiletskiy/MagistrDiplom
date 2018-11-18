@@ -52,6 +52,7 @@ namespace RoutingApp.Core.Models.NetComponents
         private Controller()
         {
             _activeTraffic = new List<Traffic>();
+            _routers = new List<Router>();
         }
 
         #endregion
