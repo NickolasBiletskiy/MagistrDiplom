@@ -1,6 +1,7 @@
 ﻿using RoutingApp.Controls;
 using RoutingApp.Core.Models.NetComponents;
 using RoutingApp.Core.Services;
+using RoutingApp.ViewModels;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -17,17 +18,20 @@ namespace RoutingApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        static double routerPositionCorrective = 32.5;
         static string defaultFilePath = ConfigurationManager.AppSettings["dataDefaultFilePath"];
 
         public List<Router> routers;
         public List<Link> links;
+        public List<WorkingRouter> routerViewModels;
+        public List<ConnectionViewModel> connections;
 
         public MainWindow()
         {
             InitializeComponent();
             LoggerService.Instance.OutPutTextBox = ConsoleOutput;
-
-
+            connections = new List<ConnectionViewModel>();
+            routerViewModels = new List<WorkingRouter>();
             //AddRoutersToCanvas();
         }
 
@@ -67,37 +71,6 @@ namespace RoutingApp
             }
         }
 
-        public void AddRoutersToCanvas()
-        {
-            WorkingArea.Children.Clear();
-            foreach (Router router in routers)
-            {
-                WorkingRouter routerControl = new WorkingRouter(router);
-                WorkingArea.Children.Add(routerControl);
-
-
-                if (router != null)
-                {
-                    Canvas.SetLeft(routerControl, router.PositionX);
-                    Canvas.SetTop(routerControl, router.PositionY);
-                    //var transform = routerControl.RenderTransform as TranslateTransform;
-                    //transform.X = router.PositionX;
-                    //transform.Y = router.PositionY;
-                }
-            }
-        }
-
-        public void AddLinksToCanvas()
-        {
-
-            //init links
-            foreach (Link link in links)
-            {
-                var line = CreateLineForLink(link);
-                WorkingArea.Children.Add(line);
-            }
-        }
-
         private void btnAddRouter_Click(object sender, RoutedEventArgs e)
         {
             var router = Controller.Instance.AddNewRouter();
@@ -119,7 +92,43 @@ namespace RoutingApp
             links = Controller.Instance.GetAllLinks();
 
             AddRoutersToCanvas();
-            AddLinksToCanvas();
+            CreateViewModels();
+        }
+
+        public void AddRoutersToCanvas()
+        {
+            WorkingArea.Children.Clear();
+            foreach (Router router in routers)
+            {
+                WorkingRouter routerControl = new WorkingRouter(router);
+                routerControl.OnRouterMove += UpdateLinksOnRouterMove;
+                WorkingArea.Children.Add(routerControl);
+
+
+                if (router != null)
+                {
+                    Canvas.SetLeft(routerControl, router.PositionX);
+                    Canvas.SetTop(routerControl, router.PositionY);
+                }
+
+                routerViewModels.Add(routerControl);
+            }
+        }
+
+        public void CreateViewModels()
+        {
+            //init links
+            foreach (Link link in links)
+            {
+                var line = CreateLineForLink(link);
+                WorkingArea.Children.Add(line);
+
+                var router1ViewModel = routerViewModels.FirstOrDefault(x => x.Router == link.Interface1.Router);
+                var router2ViewModel = routerViewModels.FirstOrDefault(x => x.Router == link.Interface2.Router);
+                var viewModel = new ConnectionViewModel(router1ViewModel, router2ViewModel, line, link);
+
+                connections.Add(viewModel);
+            }
         }
 
         private Line CreateLineForLink(Link link)
@@ -128,13 +137,33 @@ namespace RoutingApp
             Router router2 = link.Interface2.Router;
 
             Line line = new Line();
-            line.X1 = router1.PositionX + 32.5;
-            line.Y1 = router1.PositionY + 32.5;
-            line.X2 = router2.PositionX + 32.5;
-            line.Y2 = router2.PositionY + 32.5;
+            line.X1 = router1.PositionX + routerPositionCorrective;
+            line.Y1 = router1.PositionY + routerPositionCorrective;
+            line.X2 = router2.PositionX + routerPositionCorrective;
+            line.Y2 = router2.PositionY + routerPositionCorrective;
             line.Stroke = new SolidColorBrush(Colors.Black);
 
             return line;
+        }
+
+        public void UpdateLinksOnRouterMove(WorkingRouter routerView)
+        {
+            //update links to router
+            var connectionFrom = connections.Where(x => x.RouterFrom == routerView).ToList();
+            foreach (var connection in connectionFrom)
+            {
+                var line = connection.Line;
+                line.X1 = connection.RouterFrom.Router.PositionX + routerPositionCorrective;
+                line.Y1 = connection.RouterFrom.Router.PositionY + routerPositionCorrective;
+            }
+
+            var connectionTo = connections.Where(x => x.RouterTo == routerView).ToList();
+            foreach (var connection in connectionTo)
+            {
+                var line = connection.Line;
+                line.X2 = connection.RouterTo.Router.PositionX + routerPositionCorrective;
+                line.Y2 = connection.RouterTo.Router.PositionY + routerPositionCorrective;
+            }
         }
     }
 }

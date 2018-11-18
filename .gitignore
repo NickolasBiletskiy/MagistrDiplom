@@ -2,3 +2,5 @@ WriteRoutersToXML/.vs/
 WriteRoutersToXML/WriteRoutersToXML/bin/
 WriteRoutersToXML/WriteRoutersToXML/obj/
 WriteRoutersToXML/WriteRoutersToXML/routers.xml
+WriteRoutersToXML/RoutingApp/obj/
+WriteRoutersToXML/RoutingApp/bin/

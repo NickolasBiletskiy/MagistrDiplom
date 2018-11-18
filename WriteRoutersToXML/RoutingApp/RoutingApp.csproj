@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Page Include="Controls\WorkingRouter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

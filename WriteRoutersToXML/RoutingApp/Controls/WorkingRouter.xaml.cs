@@ -1,4 +1,5 @@
 ﻿using RoutingApp.Core.Models.NetComponents;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,8 +16,9 @@ namespace RoutingApp.Controls
 
         protected bool isDragging;
         private Point clickPosition;
+        public Action<WorkingRouter> OnRouterMove;
 
-        protected Router Router;
+        public Router Router;
 
         #endregion
 
@@ -62,9 +64,14 @@ namespace RoutingApp.Controls
             if (isDragging && draggableControl != null)
             {
                 Point currentPosition = e.GetPosition(this.Parent as UIElement);
+                
+                Router.PositionX = currentPosition.X - clickPosition.X;
+                Router.PositionY = currentPosition.Y - clickPosition.Y;
 
-                Canvas.SetLeft(this, currentPosition.X - clickPosition.X);
-                Canvas.SetTop(this, currentPosition.Y - clickPosition.Y);
+                Canvas.SetLeft(this, Router.PositionX);
+                Canvas.SetTop(this, Router.PositionY);
+                
+                OnRouterMove?.Invoke(this);
             }
         }
     }
