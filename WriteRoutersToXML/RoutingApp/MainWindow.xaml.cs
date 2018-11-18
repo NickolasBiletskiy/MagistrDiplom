@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace RoutingApp
 {
@@ -19,13 +20,14 @@ namespace RoutingApp
         static string defaultFilePath = ConfigurationManager.AppSettings["dataDefaultFilePath"];
 
         public List<Router> routers;
+        public List<Link> links;
 
         public MainWindow()
         {
             InitializeComponent();
             LoggerService.Instance.OutPutTextBox = ConsoleOutput;
 
-                       
+
             //AddRoutersToCanvas();
         }
 
@@ -56,17 +58,12 @@ namespace RoutingApp
             {
                 var routers = RouterSerializeService.DeserializeRouters();
 
-                this.routers = routers.ToList();
-
                 Controller.Instance.InitializeController(routers.ToList());
 
-                Controller.Instance.InitTraffic(0, 4, 10, 700, 70, "Traffic1");
-                Controller.Instance.InitTraffic(2, 3, 6, 300, 30, "Traffic2");
+                this.routers = routers.ToList();
+                this.links = Controller.Instance.GetAllLinks();
 
-                Controller.Instance.InitSimulation();
-                //Controller.Instance.StartSimulation();
 
-                var a = 5;
             }
         }
 
@@ -90,6 +87,17 @@ namespace RoutingApp
             }
         }
 
+        public void AddLinksToCanvas()
+        {
+
+            //init links
+            foreach (Link link in links)
+            {
+                var line = CreateLineForLink(link);
+                WorkingArea.Children.Add(line);
+            }
+        }
+
         private void btnAddRouter_Click(object sender, RoutedEventArgs e)
         {
             var router = Controller.Instance.AddNewRouter();
@@ -107,7 +115,26 @@ namespace RoutingApp
         {
             if (!File.Exists(defaultFilePath)) return;
             routers = RouterSerializeService.DeserializeRouters().ToList();
+            Controller.Instance.InitializeController(routers);
+            links = Controller.Instance.GetAllLinks();
+
             AddRoutersToCanvas();
+            AddLinksToCanvas();
+        }
+
+        private Line CreateLineForLink(Link link)
+        {
+            Router router1 = link.Interface1.Router;
+            Router router2 = link.Interface2.Router;
+
+            Line line = new Line();
+            line.X1 = router1.PositionX + 32.5;
+            line.Y1 = router1.PositionY + 32.5;
+            line.X2 = router2.PositionX + 32.5;
+            line.Y2 = router2.PositionY + 32.5;
+            line.Stroke = new SolidColorBrush(Colors.Black);
+
+            return line;
         }
     }
 }

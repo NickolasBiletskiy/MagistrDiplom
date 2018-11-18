@@ -62,6 +62,8 @@ namespace RoutingApp.Core.Models.NetComponents
         public void InitializeController(List<Router> routers)
         {
             _routers = routers;
+            _activeTraffic = new List<Traffic>();
+            _allPaths = new Dictionary<Tuple<Router, Router>, List<Path>>();
 
             LoggerService.Instance.CustomizeOutput(LogType.ControllerLog, LogInitializing);
 
@@ -134,6 +136,27 @@ namespace RoutingApp.Core.Models.NetComponents
 
 
             UpdateRouterInSystemIds();
+        }
+
+        public List<Link> GetAllLinks()
+        {
+            List<Link> links = new List<Link>();
+            foreach(Router router in _routers)
+            {
+                foreach(Interface inter in router.Interfaces)
+                {
+                    if (inter.IsConnected)
+                    {
+                        var link = inter.Link;
+                        if (!links.Contains(link))
+                        {
+                            links.Add(link);
+                        }
+                    }
+                }
+            }
+
+            return links;
         }
 
         #region Routing

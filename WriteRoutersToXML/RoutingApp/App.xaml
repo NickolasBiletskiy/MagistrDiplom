@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:RoutingApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Line">
+            <Setter Property="Canvas.ZIndex" Value="-1"></Setter>
+        </Style>
     </Application.Resources>
 </Application>

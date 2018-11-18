@@ -5,15 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RoutingApp.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="77" Width="77" Margin="0 0 0 0" Background="Transparent"
+             d:DesignHeight="450" d:DesignWidth="800" Height="67" Width="67" Margin="0 0 0 0" Background="Transparent"
              BorderBrush="Transparent"  BorderThickness="0"  
             PreviewMouseDown="Control_MouseLeftButtonDown"
         PreviewMouseUp="Control_MouseLeftButtonUp"
         PreviewMouseMove="Control_MouseMove">
 
     <Image Source="../Images/routerIcon.png"
-                       Height="75"
-                        Width="75"
+                       Height="65"
+                        Width="65"
                         Margin="0">
         <Image.ToolTip>
             <ToolTip Name="RouterToolTip"></ToolTip>

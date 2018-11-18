@@ -42,8 +42,8 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
-    <PositionX>362.19999999999993</PositionX>
-    <PositionY>201</PositionY>
+    <PositionX>95.199999999999932</PositionX>
+    <PositionY>45</PositionY>
   </Router>
   <Router>
     <Id>b1bba6d6-9e70-4843-bb3d-28e7565b75a4</Id>
@@ -87,8 +87,8 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
-    <PositionX>289</PositionX>
-    <PositionY>29</PositionY>
+    <PositionX>122</PositionX>
+    <PositionY>218</PositionY>
   </Router>
   <Router>
     <Id>53af82f0-b64c-4b00-bbea-b86307abaa7e</Id>
@@ -137,8 +137,8 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
-    <PositionX>178</PositionX>
-    <PositionY>208</PositionY>
+    <PositionX>252</PositionX>
+    <PositionY>109</PositionY>
   </Router>
   <Router>
     <Id>58c91f3d-e3c3-4094-9368-24a83818c193</Id>
@@ -182,8 +182,8 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
-    <PositionX>133</PositionX>
-    <PositionY>80</PositionY>
+    <PositionX>434</PositionX>
+    <PositionY>35</PositionY>
   </Router>
   <Router>
     <Id>d390cfd3-63e4-4021-be16-16973deccae0</Id>
@@ -232,7 +232,7 @@
       </Interface>
     </Interfaces>
     <IsActive>true</IsActive>
-    <PositionX>396</PositionX>
-    <PositionY>75</PositionY>
+    <PositionX>423</PositionX>
+    <PositionY>215</PositionY>
   </Router>
 </ArrayOfRouter>
