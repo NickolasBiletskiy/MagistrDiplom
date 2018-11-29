@@ -1,19 +1,24 @@
 ﻿using System.Configuration;
-using WriteRoutersToXML.Models.NetComponents;
+using RoutingApp.Core.Models.NetComponents;
 using System.IO;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using WriteRoutersToXML.Helpers;
+using RoutingApp.Core.Helpers;
 
-namespace WriteRoutersToXML.Services
+namespace RoutingApp.Core.Services
 {
-    static class RouterSerializeService
+    public static class RouterSerializeService
     {
-        static string defaultFilePath = ConfigurationManager.AppSettings["dataDefaultFilePath"];
+        public static string defaultFilePath; // need to setup it before use
 
         public static void SerializeRouters (Router[] routers)
         {
+            if (string.IsNullOrEmpty(defaultFilePath))
+            {
+                throw new System.Exception("Default FILE path is not initialized");
+            }
+
             XmlSerializer formatter = new XmlSerializer(typeof(Router[]));
             using (FileStream fs = new FileStream(defaultFilePath, FileMode.OpenOrCreate))
             {
@@ -23,6 +28,11 @@ namespace WriteRoutersToXML.Services
 
         public static Router[] DeserializeRouters()
         {
+            if (string.IsNullOrEmpty(defaultFilePath))
+            {
+                throw new System.Exception("Default FILE path is not initialized");
+            }
+
             //list to recreate connections
             List<Link> allLinks = new List<Link>();
 

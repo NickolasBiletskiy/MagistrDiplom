@@ -28,6 +28,8 @@ namespace RoutingApp
 
         public MainWindow()
         {
+            RouterSerializeService.defaultFilePath = defaultFilePath;
+
             InitializeComponent();
             LoggerService.Instance.OutPutTextBox = ConsoleOutput;
             connections = new List<ConnectionViewModel>();

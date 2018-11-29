@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace WriteRoutersToXML.Services
+namespace RoutingApp.Core.Services
 {
     public enum LogType
     {
@@ -11,7 +10,7 @@ namespace WriteRoutersToXML.Services
         Paths
     }
 
-    public class LoggerService
+    public class LoggerCore
     {
 
         #region LogTypeMapping
@@ -37,10 +36,10 @@ namespace WriteRoutersToXML.Services
         private static string _logHeaderPatern = "********** {0} **********";
         private static string _logFooterPatern = "********** End of {0} **********";
 
-        private static LoggerService _instance;
+        private static LoggerCore _instance;
         private static object _loggerLock = new object();
 
-        public static LoggerService Instance
+        public static LoggerCore Instance
         {
             get
             {
@@ -48,7 +47,7 @@ namespace WriteRoutersToXML.Services
                 {
                     if (_instance == null)
                     {
-                        _instance = new LoggerService();
+                        _instance = new LoggerCore();
                     }
                     return _instance;
                 }
@@ -60,7 +59,7 @@ namespace WriteRoutersToXML.Services
 
         #region cstor
 
-        private LoggerService()
+        private LoggerCore()
         {
 
         }
@@ -83,19 +82,23 @@ namespace WriteRoutersToXML.Services
             Console.ForegroundColor = _logColor[logType];
 
             Console.WriteLine(string.Format(_logFooterPatern, _logTypeHeader[logType]));
-            
+
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public void LogError (string message)
+        public void LogError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
 
             Console.WriteLine(message);
 
             Console.ForegroundColor = ConsoleColor.White;
-        }
+        }  
 
+        public void Log(string message){
+            Console.WriteLine(message);
+        }
+        
         #endregion
     }
 }

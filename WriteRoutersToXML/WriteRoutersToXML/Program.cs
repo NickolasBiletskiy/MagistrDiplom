@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using WriteRoutersToXML.Models.NetComponents;
-using WriteRoutersToXML.Services;
+using RoutingApp.Core.Models.NetComponents;
+using RoutingApp.Core.Services;
+
 
 namespace WriteRoutersToXML
 {
@@ -13,6 +14,9 @@ namespace WriteRoutersToXML
         static string defaultFilePath = ConfigurationManager.AppSettings["dataDefaultFilePath"];
         static void Main(string[] args)
         {
+            //init router serialize service
+            RouterSerializeService.defaultFilePath = defaultFilePath;
+
             if (!File.Exists(defaultFilePath))
             {
 

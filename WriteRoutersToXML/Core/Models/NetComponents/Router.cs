@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using WriteRoutersToXML.Models.Interfaces;
-using WriteRoutersToXML.Models.Routing;
-using WriteRoutersToXML.Models.SystemSimulation;
+using RoutingApp.Core.Models.Interfaces;
+using RoutingApp.Core.Models.Routing;
+using RoutingApp.Core.Models.SystemSimulation;
+using RoutingApp.Core.Services;
 
-namespace WriteRoutersToXML.Models.NetComponents
+namespace RoutingApp.Core.Models.NetComponents
 {
     [Serializable]
     public class Router : IDeserializable
@@ -20,6 +21,10 @@ namespace WriteRoutersToXML.Models.NetComponents
         public string Name { get; set; }
         public Interface[] Interfaces { get; set; }
         public bool IsActive { get; set; }
+
+        //Position on canvas
+        public double PositionX { get; set; }
+        public double PositionY { get; set; }
 
         [XmlIgnore]
         public List<Packet> CashedPackets = new List<Packet>();
@@ -127,8 +132,8 @@ namespace WriteRoutersToXML.Models.NetComponents
 
                 //send here
                 packetToSend.Progress += 100 * (packetToSend.Speed * (double)Constants.UPDATE_TIME / 1000) / packetToSend.Size; //convert to seconds
-                Console.WriteLine($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
-
+                //Console.WriteLine($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
+                LoggerCore.Instance.Log($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
                 // check packet is sent
                 if (packetToSend.Progress >= 100)
                 {

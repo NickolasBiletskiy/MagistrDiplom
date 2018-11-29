@@ -56,6 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\LoggerService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Page Include="Controls\WorkingRouter.xaml">
       <SubType>Designer</SubType>
@@ -72,21 +73,6 @@
     <Compile Include="Controls\WorkingRouter.xaml.cs">
       <DependentUpon>WorkingRouter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Core\Constants.cs" />
-    <Compile Include="Core\Extensions\InterfaceExtensions.cs" />
-    <Compile Include="Core\Helpers\NameSplitters.cs" />
-    <Compile Include="Core\Models\Interfaces\IDeserializable.cs" />
-    <Compile Include="Core\Models\NetComponents\Controller.cs" />
-    <Compile Include="Core\Models\NetComponents\Interface.cs" />
-    <Compile Include="Core\Models\NetComponents\Link.cs" />
-    <Compile Include="Core\Models\NetComponents\Router.cs" />
-    <Compile Include="Core\Models\Routing\Path.cs" />
-    <Compile Include="Core\Models\Routing\RoutingTableItem.cs" />
-    <Compile Include="Core\Models\SystemSimulation\Packet.cs" />
-    <Compile Include="Core\Models\SystemSimulation\Traffic.cs" />
-    <Compile Include="Core\Services\LoggerService.cs" />
-    <Compile Include="Core\Services\RouterSerializeService.cs" />
-    <Compile Include="Core\SystemSimulator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -125,6 +111,12 @@
   <ItemGroup>
     <Resource Include="Images\addRouterIcon1.png" />
     <Resource Include="Images\routerIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\Core.csproj">
+      <Project>{b24d3f97-5d51-4a12-afc8-13d85ff96a32}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

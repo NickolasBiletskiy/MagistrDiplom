@@ -6,13 +6,6 @@ using System.Windows.Threading;
 
 namespace RoutingApp.Core.Services
 {
-    public enum LogType
-    {
-        ControllerLog,
-        RouterLog,
-        Paths
-    }
-
     public class LoggerService
     {
 
@@ -108,7 +101,7 @@ namespace RoutingApp.Core.Services
                     OutPutTextBox.Text += message + "\n";
                     //OutPutTextBox.ScrollToEnd();
                     //OutPutTextBox.Text += ;
-                }), DispatcherPriority.ContextIdle);              
+                }), DispatcherPriority.ContextIdle);
             }
         }
 
