@@ -410,7 +410,8 @@ namespace WriteRoutersToXML.Models.NetComponents
         public void LogPaths(int routerFrom, int routerTo, List<Path> paths)
         {
             StringBuilder result = new StringBuilder();
-            foreach (Path path in paths)
+            var orderedPaths = paths.OrderByDescending(x => x.Metric).ToList();
+            foreach (Path path in orderedPaths)
             {
                 foreach (Router router in path.RoutersInPath)
                 {

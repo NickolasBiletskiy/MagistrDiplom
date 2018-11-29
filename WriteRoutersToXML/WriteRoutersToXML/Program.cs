@@ -16,19 +16,47 @@ namespace WriteRoutersToXML
             if (!File.Exists(defaultFilePath))
             {
 
-                var routers = new Router[5];
+                var routers = new Router[14];
 
-                for (var i = 0; i < 5; i++)
+                for (var i = 0; i < 14; i++)
                 {
                     routers[i] = new Router("router" + i, 5);
                 }
 
+                routers[0].ConnectTo(routers[1]);
                 routers[0].ConnectTo(routers[2]);
                 routers[0].ConnectTo(routers[3]);
-                routers[1].ConnectTo(routers[2]);
-                routers[1].ConnectTo(routers[4]);
-                routers[2].ConnectTo(routers[4]);
+                routers[0].ConnectTo(routers[4]);
+
+                routers[1].ConnectTo(routers[5]);
+
+                routers[2].ConnectTo(routers[5]);
+                routers[2].ConnectTo(routers[7]);
+
+                routers[3].ConnectTo(routers[8]);
                 routers[3].ConnectTo(routers[4]);
+
+                routers[4].ConnectTo(routers[8]);
+
+                routers[5].ConnectTo(routers[6]);
+
+                routers[6].ConnectTo(routers[11]);
+                routers[6].ConnectTo(routers[9]);
+                routers[6].ConnectTo(routers[12]);
+
+                routers[7].ConnectTo(routers[12]);
+                routers[7].ConnectTo(routers[8]);
+
+                routers[8].ConnectTo(routers[10]);
+
+                routers[9].ConnectTo(routers[13]);
+
+                routers[10].ConnectTo(routers[12]);
+                routers[10].ConnectTo(routers[13]);
+
+                routers[11].ConnectTo(routers[13]);
+
+                routers[12].ConnectTo(routers[13]);
 
                 RouterSerializeService.SerializeRouters(routers);
 
