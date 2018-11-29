@@ -1,5 +1,0 @@
-B:\DiplomProject\WriteRoutersToXML\ClassLibrary1\bin\Debug\ClassLibrary1.dll
-B:\DiplomProject\WriteRoutersToXML\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
-B:\DiplomProject\WriteRoutersToXML\ClassLibrary1\obj\Debug\Core.csproj.CoreCompileInputs.cache
-B:\DiplomProject\WriteRoutersToXML\ClassLibrary1\obj\Debug\ClassLibrary1.dll
-B:\DiplomProject\WriteRoutersToXML\ClassLibrary1\obj\Debug\ClassLibrary1.pdb

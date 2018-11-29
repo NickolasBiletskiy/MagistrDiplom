@@ -4,3 +4,8 @@ WriteRoutersToXML/WriteRoutersToXML/obj/
 WriteRoutersToXML/WriteRoutersToXML/routers.xml
 WriteRoutersToXML/RoutingApp/obj/
 WriteRoutersToXML/RoutingApp/bin/
+WriteRoutersToXML/Core/bin/
+WriteRoutersToXML/Core/obj/Debug/Core.csproj.FileListAbsolute.txt
+WriteRoutersToXML/Core/obj/Debug/Core.csprojAssemblyReference.cache
+WriteRoutersToXML/Core/obj/Debug/Core.dll
+WriteRoutersToXML/Core/obj/Debug/Core.pdb

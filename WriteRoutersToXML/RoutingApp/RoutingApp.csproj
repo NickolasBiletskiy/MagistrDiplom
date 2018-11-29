@@ -109,14 +109,20 @@
     <Resource Include="Images\SaveButton.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\addRouterIcon1.png" />
+    <Resource Include="Images\addRouterIcon.png" />
     <Resource Include="Images\routerIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\Core.csproj">
+    <ProjectReference Include="..\Core\Core.csproj">
       <Project>{b24d3f97-5d51-4a12-afc8-13d85ff96a32}</Project>
       <Name>Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\removeRouterIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\moveRouterIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

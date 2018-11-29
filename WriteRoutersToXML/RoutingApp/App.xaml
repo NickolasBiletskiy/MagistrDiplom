@@ -7,5 +7,12 @@
         <Style TargetType="Line">
             <Setter Property="Canvas.ZIndex" Value="-1"></Setter>
         </Style>
+
+        <Style x:Key="modeChangerButton">
+            <Setter Property="Control.VerticalAlignment" Value="Stretch"></Setter>
+            <Setter Property="Control.Margin" Value="0 0 10 0"></Setter>
+            <Setter Property="Control.BorderThickness" Value="0"></Setter>
+            <Setter Property="Control.Background" Value="Transparent"></Setter>
+        </Style>
     </Application.Resources>
 </Application>

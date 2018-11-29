@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:RoutingApp"
         xmlns:Control="clr-namespace:RoutingApp.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000" MaxWidth="1300" MaxHeight="800">
+        Title="MainWindow" Height="650" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="90"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -24,22 +24,35 @@
                     Margin="0,0,0,0"                                      
                     Background="White"
                     Orientation="Horizontal">
-            <GroupBox x:Name="saveOpenGroup" Margin="0 0 50 0">
+            <GroupBox x:Name="saveOpenGroup" Margin="0 0 10 0" Header="FileSystem">
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btnSaveToFile" Width="70" Height="70" Margin="0 0 10 0" BorderThickness="0" Background="Transparent" Click="btnSaveToFile_Click">
+                    <Button x:Name="btnSaveToFile" Style="{StaticResource modeChangerButton}" Click="btnSaveToFile_Click">
                         <Image Source="Images/SaveButton.ico"></Image>
                     </Button>
-                    <Button x:Name="btnLoadFromFile" Width="70" Height="70" BorderThickness="0" Background="Transparent" Click="btnLoadFromFile_Click">
+                    <Button x:Name="btnLoadFromFile" Style="{StaticResource modeChangerButton}" Click="btnLoadFromFile_Click">
                         <Image Source="Images/open-file-icon.png"></Image>
                     </Button>
                 </StackPanel>
             </GroupBox>
-            <Button x:Name="btnAddRouter" Height="65" Width="86" Margin="0 20 0 0" BorderThickness="0" Background="Transparent" Click="btnAddRouter_Click">
-                <Image Source="Images/addRouterIcon1.png"
-                       Height="60"
-                        Width="82">                
-                </Image>
-            </Button>
+            <GroupBox x:Name="routerBtnsGroup" Margin="0 0 50 0" Header="Routers">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnAddRouter" Style="{StaticResource modeChangerButton}" Click="btnAddRouter_Click">
+                        <Image Source="Images/addRouterIcon.png"                       
+                        VerticalAlignment="Stretch">
+                        </Image>
+                    </Button>
+                    <Button x:Name="btnRemoveRouter" Style="{StaticResource modeChangerButton}">
+                        <Image Source="Images/removeRouterIcon.png"                       
+                        VerticalAlignment="Stretch">
+                        </Image>
+                    </Button>
+                    <Button x:Name="btnMoveRouter" Style="{StaticResource modeChangerButton}">
+                        <Image Source="Images/moveRouterIcon.png"                       
+                        VerticalAlignment="Stretch">
+                        </Image>
+                    </Button>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
         <ScrollViewer Grid.Column="0" Grid.Row="1" Background="AntiqueWhite" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Canvas Width="3000" Height="3000" x:Name="WorkingArea">
