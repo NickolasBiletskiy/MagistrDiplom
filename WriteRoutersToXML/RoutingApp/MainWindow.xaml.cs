@@ -13,6 +13,22 @@ using System.Windows.Shapes;
 
 namespace RoutingApp
 {
+
+    public enum EditorState
+    {
+        None,
+        RouterDelete,
+        RouterMove,
+        LinkAdd,
+        LinkDelete
+    }
+
+    public enum ProgramState
+    {
+        Simulation,
+        Edition
+    }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -26,16 +42,64 @@ namespace RoutingApp
         public List<WorkingRouter> routerViewModels;
         public List<ConnectionViewModel> connections;
 
+        private EditorState editorState = EditorState.RouterMove;
+        private ProgramState programState = ProgramState.Edition;
+        private List<Button> editorStateButtons = new List<Button>();
+
         public MainWindow()
         {
             RouterSerializeService.defaultFilePath = defaultFilePath;
 
             InitializeComponent();
+
+            InitTopPanelButtonEventHandlers();
+
             LoggerService.Instance.OutPutTextBox = ConsoleOutput;
             connections = new List<ConnectionViewModel>();
             routerViewModels = new List<WorkingRouter>();
             //AddRoutersToCanvas();
         }
+
+        #region Click Listeners
+
+        private void InitTopPanelButtonEventHandlers()
+        {
+            editorStateButtons.Add(btnRemoveRouter);
+            editorStateButtons.Add(btnMoveRouter);
+            editorStateButtons.Add(btnAddLink);
+            editorStateButtons.Add(btnRemoveLink);
+        }
+
+        private void btnRemoveRouter_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchEditorState(sender as Button);
+        }
+
+        private void btnMoveRouter_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchEditorState(sender as Button);
+        }
+
+        private void btnAddLink_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchEditorState(sender as Button);
+        }
+
+        private void btnRemoveLink_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchEditorState(sender as Button);
+        }
+
+        public void SwitchEditorState(Button clickedButton)
+        {
+            foreach(var button in editorStateButtons)
+            {
+                button.Style = (Style)FindResource("modeChangerButton");
+            }
+            clickedButton.Style = FindResource("modeChangerButtonActive") as Style;
+        }
+
+        #endregion
 
         public void DebugRun()
         {
@@ -73,14 +137,8 @@ namespace RoutingApp
             }
         }
 
-        private void btnAddRouter_Click(object sender, RoutedEventArgs e)
-        {
-            var router = Controller.Instance.AddNewRouter();
-            WorkingRouter routerControl = new WorkingRouter(router);
-            WorkingArea.Children.Add(routerControl);
-            var a = 5;
-        }
 
+        #region File System
         private void btnSaveToFile_Click(object sender, RoutedEventArgs e)
         {
             RouterSerializeService.SerializeRouters(routers.ToArray());
@@ -96,6 +154,17 @@ namespace RoutingApp
             AddRoutersToCanvas();
             CreateViewModels();
         }
+        #endregion
+
+        #region Routers
+        private void btnAddRouter_Click(object sender, RoutedEventArgs e)
+        {
+            var router = Controller.Instance.AddNewRouter();
+            WorkingRouter routerControl = new WorkingRouter(router);
+            WorkingArea.Children.Add(routerControl);
+            var a = 5;
+        }
+        #endregion
 
         public void AddRoutersToCanvas()
         {
@@ -167,5 +236,6 @@ namespace RoutingApp
                 line.Y2 = connection.RouterTo.Router.PositionY + routerPositionCorrective;
             }
         }
+
     }
 }

@@ -124,5 +124,9 @@
   <ItemGroup>
     <Resource Include="Images\moveRouterIcon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\addLinkIcon.png" />
+    <Resource Include="Images\removeLinkIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,11 +8,16 @@
             <Setter Property="Canvas.ZIndex" Value="-1"></Setter>
         </Style>
 
-        <Style x:Key="modeChangerButton">
+        <Style x:Key="topPanelBtn">
             <Setter Property="Control.VerticalAlignment" Value="Stretch"></Setter>
             <Setter Property="Control.Margin" Value="0 0 10 0"></Setter>
             <Setter Property="Control.BorderThickness" Value="0"></Setter>
             <Setter Property="Control.Background" Value="Transparent"></Setter>
+        </Style>
+        <Style x:Key="modeChangerButton" BasedOn="{StaticResource topPanelBtn}"></Style>
+        <Style x:Key="modeChangerButtonActive" BasedOn="{StaticResource topPanelBtn}">
+            <Setter Property="Control.BorderThickness" Value="2"></Setter>
+            <Setter Property="Control.BorderBrush" Value="Blue"></Setter>
         </Style>
     </Application.Resources>
 </Application>

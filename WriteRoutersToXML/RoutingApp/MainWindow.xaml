@@ -9,7 +9,7 @@
         Title="MainWindow" Height="650" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="70"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -24,32 +24,42 @@
                     Margin="0,0,0,0"                                      
                     Background="White"
                     Orientation="Horizontal">
-            <GroupBox x:Name="saveOpenGroup" Margin="0 0 10 0" Header="FileSystem">
+            <GroupBox x:Name="saveOpenGroup" Margin="0 0 10 0" Header="File System">
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btnSaveToFile" Style="{StaticResource modeChangerButton}" Click="btnSaveToFile_Click">
+                    <Button x:Name="btnSaveToFile" Style="{StaticResource topPanelBtn}" Click="btnSaveToFile_Click">
                         <Image Source="Images/SaveButton.ico"></Image>
                     </Button>
-                    <Button x:Name="btnLoadFromFile" Style="{StaticResource modeChangerButton}" Click="btnLoadFromFile_Click">
+                    <Button x:Name="btnLoadFromFile" Style="{StaticResource topPanelBtn}" Click="btnLoadFromFile_Click">
                         <Image Source="Images/open-file-icon.png"></Image>
                     </Button>
                 </StackPanel>
             </GroupBox>
-            <GroupBox x:Name="routerBtnsGroup" Margin="0 0 50 0" Header="Routers">
+            <GroupBox x:Name="routerBtnsGroup" Margin="0 0 10 0" Header="Routers">
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="btnAddRouter" Style="{StaticResource modeChangerButton}" Click="btnAddRouter_Click">
                         <Image Source="Images/addRouterIcon.png"                       
                         VerticalAlignment="Stretch">
                         </Image>
                     </Button>
-                    <Button x:Name="btnRemoveRouter" Style="{StaticResource modeChangerButton}">
+                    <Button x:Name="btnRemoveRouter" Style="{StaticResource modeChangerButton}" Click="btnRemoveRouter_Click">
                         <Image Source="Images/removeRouterIcon.png"                       
                         VerticalAlignment="Stretch">
                         </Image>
                     </Button>
-                    <Button x:Name="btnMoveRouter" Style="{StaticResource modeChangerButton}">
+                    <Button x:Name="btnMoveRouter" Style="{StaticResource modeChangerButton}" Click="btnMoveRouter_Click">
                         <Image Source="Images/moveRouterIcon.png"                       
                         VerticalAlignment="Stretch">
                         </Image>
+                    </Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox x:Name="linkGroup" Margin="0 0 10 0" Header="Links">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnAddLink" Style="{StaticResource modeChangerButton}" Click="btnAddLink_Click">
+                        <Image Source="Images/addLinkIcon.png"></Image>
+                    </Button>
+                    <Button x:Name="btnRemoveLink" Style="{StaticResource modeChangerButton}" Click="btnRemoveLink_Click">
+                        <Image Source="Images/removeLinkIcon.png"></Image>
                     </Button>
                 </StackPanel>
             </GroupBox>
