@@ -108,6 +108,10 @@ namespace RoutingApp
         {
             CreateTrafficPopup popUpWindow = new CreateTrafficPopup();
             popUpWindow.Owner = this;
+            popUpWindow.OkClicked += (routerFrom, routerTo, numberOfPackets, sizeOfPackets, desiredSpeed, trafficName) =>
+            {
+                Controller.Instance.InitTraffic(routerFrom, routerTo, numberOfPackets, sizeOfPackets, desiredSpeed, trafficName);
+            };
 
             popUpWindow.ShowDialog();
         }

@@ -45,7 +45,7 @@
         <TextBlock Text="Traffic name" Grid.Row="5" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
         <TextBox x:Name="trafficName" Grid.Row="5" Grid.Column="1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto"></TextBox>
 
-        <Button x:Name="buttonOk" Grid.Row="6" Grid.Column="0" Content="OK" Margin="5 5 5 5"></Button>
+        <Button x:Name="buttonOk" Grid.Row="6" Grid.Column="0" Content="OK" Margin="5 5 5 5" Click="buttonOk_Click"></Button>
         <Button x:Name="buttonCancel" Grid.Row="6" Grid.Column="1" Content="Cancel"  Margin="5 5 5 5" Click="buttonCancel_Click"></Button>
     </Grid>
 </Window>
