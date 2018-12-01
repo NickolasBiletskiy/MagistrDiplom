@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Services;
 using RoutingApp.Core.Extensions;
 using RoutingApp.Core.Models.Routing;
 using RoutingApp.Core.Models.SystemSimulation;
@@ -15,6 +16,8 @@ namespace RoutingApp.Core.Models.NetComponents
     {
 
         #region Fields
+
+        public ILogger LoggerService { get; set; }
 
         private List<Router> _routers;
 
@@ -65,9 +68,9 @@ namespace RoutingApp.Core.Models.NetComponents
             _activeTraffic = new List<Traffic>();
             _allPaths = new Dictionary<Tuple<Router, Router>, List<Path>>();
 
-            LoggerCore.Instance.CustomizeOutput(LogType.ControllerLog, LogInitializing);
+            LoggerService.CustomizeOutput(LogType.ControllerLog, LogInitializing());
 
-            LoggerCore.Instance.CustomizeOutput(LogType.RouterLog, LogRouterConnections);
+            LoggerService.CustomizeOutput(LogType.RouterLog, LogRouterConnections());
         }                         
 
         public Router GetClothestRouter(Router routerFrom, Router routerTo)
@@ -96,14 +99,15 @@ namespace RoutingApp.Core.Models.NetComponents
 
         public void GetAllConnections()
         {
-            LoggerCore.Instance.CustomizeOutput(LogType.ControllerLog, LogInitializing);
+            LoggerService.CustomizeOutput(LogType.ControllerLog, LogInitializing());
 
-            LoggerCore.Instance.CustomizeOutput(LogType.RouterLog, LogRouterConnections);
+            LoggerService.CustomizeOutput(LogType.RouterLog, LogRouterConnections());
         }
 
         public Router AddNewRouter()
         {
             int lastRouterIndex = _routers.OrderByDescending(x => x.RouterInSystemId).Select(x => x.RouterInSystemId).FirstOrDefault();
+            if (_routers.Count == 0) lastRouterIndex = -1;
             Router router = new Router("router" + ++lastRouterIndex);
             router.RouterInSystemId = lastRouterIndex;
             _routers.Add(router);
@@ -124,6 +128,14 @@ namespace RoutingApp.Core.Models.NetComponents
             UpdatePathsFromRouters(routers, router);
         }
 
+        public void CreateConnections(Router routerFrom, Router routerTo)
+        {
+            routerFrom.ConnectTo(routerTo);
+
+            UpdatePathsFromRouters(new List<Router> { routerFrom }, routerTo);
+            UpdatePathsFromRouters(new List<Router> { routerTo }, routerFrom);
+        }
+
         public void RemoveRouter(int routerInSystemID)
         {
             Console.WriteLine($"Initiated removing router {routerInSystemID}");
@@ -134,8 +146,41 @@ namespace RoutingApp.Core.Models.NetComponents
 
             RemoveAllPathsContainingRouter(router);
 
+            UpdateRouterInSystemIds();
+        }
+
+        public void RemoveRouter(Router router)
+        {
+            Console.WriteLine($"Initiated removing router {router.RouterInSystemId}");
+
+            router.RemoveConnections();
+            _routers.Remove(router);
+
+            RemoveAllPathsContainingRouter(router);
 
             UpdateRouterInSystemIds();
+        }
+
+        public void RemoveLink(Link link)
+        {
+            //remove paths
+            List<Router> connectedRouters = new List<Router> { link.Interface1.Router, link.Interface2.Router };
+            var pathsContainingLinkedRouters = _allPaths.Values.SelectMany(x => x).Where(x=>x.DoesPathContainsAllRouters(connectedRouters)).ToList();
+
+            for(var i = pathsContainingLinkedRouters.Count -1; i >= 0; i--)
+            {
+                var path = pathsContainingLinkedRouters[i];
+
+                var router1Position = path.RoutersInPath.IndexOf(link.Interface1.Router);
+                var router2Position = path.RoutersInPath.IndexOf(link.Interface2.Router);
+
+                if (Math.Abs(router1Position - router2Position) == 1) //if routers are siblings in path
+                {
+                    pathsContainingLinkedRouters.RemoveAt(i);
+                }
+            }
+
+            link.Interface1.RemoveConnection();
         }
 
         public List<Link> GetAllLinks()
@@ -170,10 +215,7 @@ namespace RoutingApp.Core.Models.NetComponents
             List<Path> currentPaths;
             if (_allPaths.TryGetValue(tuple, out currentPaths))
             {
-                LoggerCore.Instance.CustomizeOutput(LogType.Paths, () =>
-                {
-                    LogPaths(routerFrom, routerTo, currentPaths);
-                });
+                LoggerService.CustomizeOutput(LogType.Paths, LogPaths(routerFrom, routerTo, currentPaths));
                 return currentPaths;
             }
 
@@ -189,11 +231,8 @@ namespace RoutingApp.Core.Models.NetComponents
             //fill alternative paths
             FillReversePaths(tuple, paths);
 
-            LoggerCore.Instance.CustomizeOutput(LogType.Paths, () =>
-            {
-                LogPaths(routerFrom, routerTo, _allPaths[tuple]);
-            });
-
+            LoggerService.CustomizeOutput(LogType.Paths, LogPaths(routerFrom, routerTo, _allPaths[tuple]));            
+    
             return _allPaths[tuple];
         }
 
@@ -299,6 +338,7 @@ namespace RoutingApp.Core.Models.NetComponents
                     _allPaths.Add(tuple, currentPaths);
                 }
             }
+            LogRouterConnections();
         }
 
         private bool IsPathContainsInList(List<Path> paths, Path pathToCheck)
@@ -394,8 +434,10 @@ namespace RoutingApp.Core.Models.NetComponents
 
         #region Log methods
 
-        public void LogInitializing()
+        public string LogInitializing()
         {
+            //TODO Fix
+
             Console.WriteLine("Controller initialized \nConnection matrix");
             //top header
             StringBuilder topHeader = new StringBuilder("\t");
@@ -422,17 +464,20 @@ namespace RoutingApp.Core.Models.NetComponents
                 }
                 Console.WriteLine();
             };
+            return "";
         }
 
-        public void LogRouterConnections()
+        public string LogRouterConnections()
         {
+            var logString = new StringBuilder();
             foreach (Router router in _routers)
             {
-                router.LogConnections();
+                logString.Append(router.LogConnections());
             }
+            return logString.ToString();
         }
 
-        public void LogPaths(int routerFrom, int routerTo, List<Path> paths)
+        public string LogPaths(int routerFrom, int routerTo, List<Path> paths)
         {
             StringBuilder result = new StringBuilder();
             var orderedPaths = paths.OrderByDescending(x => x.Metric).ToList();
@@ -452,7 +497,7 @@ namespace RoutingApp.Core.Models.NetComponents
                 }
                 result.Append("\n");
             }
-            Console.WriteLine(result.ToString());
+            return result.ToString();
         }
 
         #endregion

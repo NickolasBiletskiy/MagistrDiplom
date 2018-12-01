@@ -1,16 +1,10 @@
-﻿using System;
+﻿using Core.Services;
+using System;
 using System.Collections.Generic;
 
 namespace RoutingApp.Core.Services
 {
-    public enum LogType
-    {
-        ControllerLog,
-        RouterLog,
-        Paths
-    }
-
-    public class LoggerCore
+    public class LoggerCore : ILogger
     {
 
         #region LogTypeMapping
@@ -69,7 +63,7 @@ namespace RoutingApp.Core.Services
         #region Public methods
 
         //action - output code must be here
-        public void CustomizeOutput(LogType logType, Action action)
+        public void CustomizeOutput(LogType logType, string message)
         {
             Console.ForegroundColor = _logColor[logType];
 
@@ -77,7 +71,7 @@ namespace RoutingApp.Core.Services
 
             Console.ForegroundColor = ConsoleColor.White;
 
-            action();
+            Console.WriteLine(message);
 
             Console.ForegroundColor = _logColor[logType];
 

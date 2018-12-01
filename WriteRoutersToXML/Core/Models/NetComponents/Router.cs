@@ -195,9 +195,8 @@ namespace RoutingApp.Core.Models.NetComponents
             {
                 string anotherRouterName = (inter.Link.Interface1 == inter) ? inter.Link.Interface2.Router.Name : inter.Link.Interface1.Router.Name;
                 result.Append($"Connection to {anotherRouterName} using {inter.FullName}, Metric = {inter.Link.Metric} \n");
-                //result.Append("Connection to");
-            });
-            Console.WriteLine(result.ToString());
+
+            });            
             return result.ToString();
         }
 

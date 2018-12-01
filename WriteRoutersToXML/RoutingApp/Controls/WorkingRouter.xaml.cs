@@ -20,6 +20,8 @@ namespace RoutingApp.Controls
 
         public Router Router;
 
+        public bool IsMovingEnabled = true;
+
         #endregion
 
         public WorkingRouter(Router router) : this()
@@ -37,41 +39,50 @@ namespace RoutingApp.Controls
 
         private void Control_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            isDragging = true;
-            var draggableControl = sender as WorkingRouter;
-            clickPosition = e.GetPosition(this);
-            draggableControl.CaptureMouse();
+            if (IsMovingEnabled)
+            {
+                isDragging = true;
+                var draggableControl = sender as WorkingRouter;
+                clickPosition = e.GetPosition(this);
+                draggableControl.CaptureMouse();
+            }
         }
 
         private void Control_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            isDragging = false;
-            var draggable = sender as WorkingRouter;
-            draggable.ReleaseMouseCapture();
-
-            //save position state
-            if (Router != null)
+            if (IsMovingEnabled)
             {
-                Router.PositionX = Canvas.GetLeft(this);
-                Router.PositionY = Canvas.GetTop(this);
+                isDragging = false;
+                var draggable = sender as WorkingRouter;
+                draggable.ReleaseMouseCapture();
+
+                //save position state
+                if (Router != null)
+                {
+                    Router.PositionX = Canvas.GetLeft(this);
+                    Router.PositionY = Canvas.GetTop(this);
+                }
             }
         }
 
         private void Control_MouseMove(object sender, MouseEventArgs e)
         {
-            var draggableControl = sender as WorkingRouter;
-
-            if (isDragging && draggableControl != null)
+            if (IsMovingEnabled)
             {
-                Point currentPosition = e.GetPosition(this.Parent as UIElement);
-                
-                Router.PositionX = currentPosition.X - clickPosition.X;
-                Router.PositionY = currentPosition.Y - clickPosition.Y;
+                var draggableControl = sender as WorkingRouter;
 
-                Canvas.SetLeft(this, Router.PositionX);
-                Canvas.SetTop(this, Router.PositionY);
-                
-                OnRouterMove?.Invoke(this);
+                if (isDragging && draggableControl != null)
+                {
+                    Point currentPosition = e.GetPosition(this.Parent as UIElement);
+
+                    Router.PositionX = currentPosition.X - clickPosition.X;
+                    Router.PositionY = currentPosition.Y - clickPosition.Y;
+
+                    Canvas.SetLeft(this, Router.PositionX);
+                    Canvas.SetTop(this, Router.PositionY);
+
+                    OnRouterMove?.Invoke(this);
+                }
             }
         }
     }

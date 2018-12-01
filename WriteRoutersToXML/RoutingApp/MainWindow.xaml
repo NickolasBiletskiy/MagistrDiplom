@@ -46,7 +46,7 @@
                         VerticalAlignment="Stretch">
                         </Image>
                     </Button>
-                    <Button x:Name="btnMoveRouter" Style="{StaticResource modeChangerButton}" Click="btnMoveRouter_Click">
+                    <Button x:Name="btnMoveRouter" Style="{StaticResource modeChangerButtonActive}" Click="btnMoveRouter_Click">
                         <Image Source="Images/moveRouterIcon.png"                       
                         VerticalAlignment="Stretch">
                         </Image>
@@ -72,7 +72,7 @@
 
         <GridSplitter Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ></GridSplitter>
         <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
-            <TextBox x:Name="ConsoleOutput" TextWrapping="WrapWithOverflow" VerticalScrollBarVisibility="Auto"></TextBox>
+            <RichTextBox x:Name="ConsoleOutput" VerticalScrollBarVisibility="Auto"></RichTextBox>
         </Grid>
 
 

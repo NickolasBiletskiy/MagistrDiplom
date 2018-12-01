@@ -53,6 +53,7 @@
     <Compile Include="Models\Routing\RoutingTableItem.cs" />
     <Compile Include="Models\SystemSimulation\Packet.cs" />
     <Compile Include="Models\SystemSimulation\Traffic.cs" />
+    <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\LoggerCore.cs" />
     <Compile Include="Services\RouterSerializeService.cs" />
     <Compile Include="SystemSimulator.cs" />

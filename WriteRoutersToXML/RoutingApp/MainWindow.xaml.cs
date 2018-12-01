@@ -46,9 +46,15 @@ namespace RoutingApp
         private ProgramState programState = ProgramState.Edition;
         private List<Button> editorStateButtons = new List<Button>();
 
+        //Link creating
+        private WorkingRouter routerFrom;
+        private WorkingRouter routerTo;
+        private bool linkDrawingStarted;
+
         public MainWindow()
         {
             RouterSerializeService.defaultFilePath = defaultFilePath;
+            Controller.Instance.LoggerService = LoggerService.Instance;
 
             InitializeComponent();
 
@@ -73,26 +79,138 @@ namespace RoutingApp
         private void btnRemoveRouter_Click(object sender, RoutedEventArgs e)
         {
             SwitchEditorState(sender as Button);
+            editorState = EditorState.RouterDelete;
+            SetMovingEnabled(false);
         }
 
         private void btnMoveRouter_Click(object sender, RoutedEventArgs e)
         {
             SwitchEditorState(sender as Button);
+            editorState = EditorState.RouterMove;
+            SetMovingEnabled(true);
         }
 
         private void btnAddLink_Click(object sender, RoutedEventArgs e)
         {
             SwitchEditorState(sender as Button);
+            editorState = EditorState.LinkAdd;
+            SetMovingEnabled(false);
         }
 
         private void btnRemoveLink_Click(object sender, RoutedEventArgs e)
         {
             SwitchEditorState(sender as Button);
+            editorState = EditorState.LinkDelete;
+            SetMovingEnabled(false);
+        }
+
+        //Handle router click events and do different actions depending on state
+        public void workingRouter_Click(object sender, RoutedEventArgs e)
+        {
+            if (programState == ProgramState.Edition)
+            {
+                WorkingRouter senderRouter = (WorkingRouter)sender;
+                switch (editorState)
+                {
+                    case EditorState.RouterDelete:
+                        var listOfConnections = connections.Where(x => x.RouterFrom == senderRouter || x.RouterTo == senderRouter);
+                        //delete links from canvas
+                        foreach (var connection in listOfConnections)
+                        {
+                            links.Remove(connection.Link);
+                            WorkingArea.Children.Remove(connection.Line);
+                        }
+                        connections.RemoveAll(x => x.RouterFrom == senderRouter || x.RouterTo == senderRouter);
+
+                        routerViewModels.Remove(senderRouter);
+                        WorkingArea.Children.Remove(senderRouter);
+
+                        Controller.Instance.RemoveRouter(senderRouter.Router);
+                        break;
+                    case EditorState.LinkAdd:
+                        if (!linkDrawingStarted)
+                        {
+                            if (senderRouter.Router.GetFirstFreeInterface() == null)
+                            {
+                                NoInterfacesMessageBox();
+                                return;
+                            }
+
+                            linkDrawingStarted = true;
+                            routerFrom = senderRouter;
+                        }
+                        else    //confirm link
+                        {
+                            //check self clicking
+                            if (senderRouter == routerFrom) return;
+
+                            //check free interfaces
+                            if (senderRouter.Router.GetFirstFreeInterface() == null)
+                            {
+                                NoInterfacesMessageBox();
+                                return;
+                            }
+
+                            //check routers already connected
+                            if (senderRouter.Router.GetLinkToRouter(routerFrom.Router) != null)
+                            {
+                                MessageBox.Show("This routers are already connected");
+                                return;
+                            }
+
+                            var tempLine = new Line();
+                            tempLine.MouseLeftButtonDown += link_Click;
+                            tempLine.X1 = routerFrom.Router.PositionX + routerPositionCorrective;
+                            tempLine.Y1 = routerFrom.Router.PositionY + routerPositionCorrective;
+                            tempLine.X2 = senderRouter.Router.PositionX + routerPositionCorrective;
+                            tempLine.Y2 = senderRouter.Router.PositionY + routerPositionCorrective;
+                            tempLine.Stroke = new SolidColorBrush(Colors.Black);
+
+                            //Controller.Instance.Con
+                            Controller.Instance.CreateConnections(routerFrom.Router, senderRouter.Router);
+                            connections.Add(new ConnectionViewModel(routerFrom, senderRouter, tempLine, routerFrom.Router.GetLinkToRouter(senderRouter.Router)));
+                            WorkingArea.Children.Add(tempLine);
+
+                            linkDrawingStarted = false;
+                            routerFrom = null;
+                        }
+                        break;
+                }
+            }
+        }
+
+        public void link_Click(object sender, RoutedEventArgs e)
+        {
+            if (programState == ProgramState.Edition)
+            {
+                Line clickedLine = (Line)sender;
+                switch (editorState)
+                {
+                    case EditorState.LinkDelete:
+                        var connection = connections.FirstOrDefault(x => x.Line == clickedLine);
+
+                        var messageBoxResult = MessageBox.Show($"Are you sure, you want to delete link between {connection.RouterFrom.Router.Name} and {connection.RouterTo.Router.Name}"
+                            ,"Confirm deletion of link"
+                            ,MessageBoxButton.YesNo
+                            ,MessageBoxImage.Question);
+
+                        if (messageBoxResult == MessageBoxResult.No) return;
+
+
+                        //remove link from system
+                        Controller.Instance.RemoveLink(connection.Link);
+
+                        //remmove link from ui
+                        connections.Remove(connection);
+                        WorkingArea.Children.Remove(connection.Line);
+                        break;
+                }
+            }
         }
 
         public void SwitchEditorState(Button clickedButton)
         {
-            foreach(var button in editorStateButtons)
+            foreach (var button in editorStateButtons)
             {
                 button.Style = (Style)FindResource("modeChangerButton");
             }
@@ -161,9 +279,21 @@ namespace RoutingApp
         {
             var router = Controller.Instance.AddNewRouter();
             WorkingRouter routerControl = new WorkingRouter(router);
+            routerControl.OnRouterMove += UpdateLinksOnRouterMove;
+            routerControl.PreviewMouseDown += workingRouter_Click;
+            routerViewModels.Add(routerControl);
             WorkingArea.Children.Add(routerControl);
             var a = 5;
         }
+
+        private void SetMovingEnabled(bool isEnabled)
+        {
+            foreach (var routerView in routerViewModels)
+            {
+                routerView.IsMovingEnabled = isEnabled;
+            }
+        }
+
         #endregion
 
         public void AddRoutersToCanvas()
@@ -173,6 +303,7 @@ namespace RoutingApp
             {
                 WorkingRouter routerControl = new WorkingRouter(router);
                 routerControl.OnRouterMove += UpdateLinksOnRouterMove;
+                routerControl.PreviewMouseDown += workingRouter_Click;
                 WorkingArea.Children.Add(routerControl);
 
 
@@ -208,6 +339,7 @@ namespace RoutingApp
             Router router2 = link.Interface2.Router;
 
             Line line = new Line();
+            line.MouseLeftButtonDown += link_Click;
             line.X1 = router1.PositionX + routerPositionCorrective;
             line.Y1 = router1.PositionY + routerPositionCorrective;
             line.X2 = router2.PositionX + routerPositionCorrective;
@@ -236,6 +368,15 @@ namespace RoutingApp
                 line.Y2 = connection.RouterTo.Router.PositionY + routerPositionCorrective;
             }
         }
+
+        #region MessageBoxes
+
+        public void NoInterfacesMessageBox()
+        {
+            MessageBox.Show("There are not free interfaces, choose another router");
+        }
+
+        #endregion
 
     }
 }

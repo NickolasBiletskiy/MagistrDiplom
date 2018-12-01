@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using RoutingApp.Core.Models.NetComponents;
 
 namespace RoutingApp.Core.Models.Routing
@@ -102,6 +103,11 @@ namespace RoutingApp.Core.Models.Routing
         public bool DoesPathContainsRouter(Router router)
         {
             return RoutersInPath.Contains(router);
+        }
+
+        public bool DoesPathContainsAllRouters(List<Router> routers)
+        {
+            return !routers.Except(RoutersInPath).Any();
         }
 
         #endregion
