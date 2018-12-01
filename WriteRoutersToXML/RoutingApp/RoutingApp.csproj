@@ -56,9 +56,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateTrafficPopup.xaml.cs">
+      <DependentUpon>CreateTrafficPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Page Include="Controls\WorkingRouter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateTrafficPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -127,6 +134,9 @@
   <ItemGroup>
     <Resource Include="Images\addLinkIcon.png" />
     <Resource Include="Images\removeLinkIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mailIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

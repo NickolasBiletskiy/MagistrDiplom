@@ -63,6 +63,12 @@
                     </Button>
                 </StackPanel>
             </GroupBox>
+            <GroupBox Margin="0 0 10 0" Header="Generate traffic">
+                <Button x:Name="initTrafficBtn" Style="{StaticResource topPanelBtn}" Click="btnInitTraffic_Click">
+                    <Image Source="Images/mailIcon.png"></Image>
+                </Button>
+            </GroupBox>
+
         </StackPanel>
         <ScrollViewer Grid.Column="0" Grid.Row="1" Background="AntiqueWhite" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Canvas Width="3000" Height="3000" x:Name="WorkingArea">
@@ -74,7 +80,6 @@
         <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
             <RichTextBox x:Name="ConsoleOutput" VerticalScrollBarVisibility="Auto"></RichTextBox>
         </Grid>
-
 
     </Grid>
 </Window>

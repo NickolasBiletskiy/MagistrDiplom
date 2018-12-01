@@ -104,6 +104,14 @@ namespace RoutingApp
             SetMovingEnabled(false);
         }
 
+        private void btnInitTraffic_Click(object sender, RoutedEventArgs e)
+        {
+            CreateTrafficPopup popUpWindow = new CreateTrafficPopup();
+            popUpWindow.Owner = this;
+
+            popUpWindow.ShowDialog();
+        }
+
         //Handle router click events and do different actions depending on state
         public void workingRouter_Click(object sender, RoutedEventArgs e)
         {
