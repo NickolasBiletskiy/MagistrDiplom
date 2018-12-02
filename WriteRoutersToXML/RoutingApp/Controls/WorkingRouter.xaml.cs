@@ -26,10 +26,9 @@ namespace RoutingApp.Controls
 
         public WorkingRouter(Router router) : this()
         {
-            this.Router = router;
-            var toolTip = this.FindName("RouterToolTip") as ToolTip;
-
-            toolTip.Content = Router.Name;
+            Router = router;
+            router.RouterIndexChanged += SetToolTipName;
+            SetToolTipName(Router.Name);
         }
 
         public WorkingRouter()
@@ -84,6 +83,16 @@ namespace RoutingApp.Controls
                     OnRouterMove?.Invoke(this);
                 }
             }
+        }
+
+        private void SetToolTipName(string name)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                var toolTip = this.FindName("RouterToolTip") as ToolTip;
+
+                toolTip.Content = Router.Name;
+            }));
         }
     }
 }

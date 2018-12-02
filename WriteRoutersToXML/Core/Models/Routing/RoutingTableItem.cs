@@ -10,7 +10,7 @@ namespace RoutingApp.Core.Models.Routing
         public DateTime LastPathUpdateTS { get; set; }
         public bool IsExpired { get
             {
-                return (LastPathUpdateTS - DateTime.UtcNow).TotalSeconds > Constants.PATH_UPDATE_TIME;
+                return Math.Abs((LastPathUpdateTS - DateTime.UtcNow).TotalSeconds) > Constants.PATH_UPDATE_TIME;
             } }
     }
 }

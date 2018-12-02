@@ -99,6 +99,7 @@ namespace RoutingApp.Core.Models.NetComponents
 
             if (bestPath.RoutersInPath.Count > 1)
             {
+                LoggerService.CustomizeOutput(LogType.Paths, LogPaths(routerFrom.RouterInSystemId, routerTo.RouterInSystemId, _allPaths[searchTuple]));
                 return bestPath.RoutersInPath[1];
             }
 
@@ -165,6 +166,8 @@ namespace RoutingApp.Core.Models.NetComponents
 
             router.RemoveConnections();
             _routers.Remove(router);
+
+            router.IsActive = false;
 
             RemoveAllPathsContainingRouter(router);
 

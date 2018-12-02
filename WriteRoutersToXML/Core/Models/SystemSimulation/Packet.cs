@@ -9,6 +9,7 @@ namespace RoutingApp.Core.Models.SystemSimulation
 
         public Traffic Traffic { get; private set; }
         public bool IsSending { get; set; }
+        public bool IsJustReceived { get; set; }
         public bool IsTransmitted { get; set; }
         public int PacketID { get; set; }
 

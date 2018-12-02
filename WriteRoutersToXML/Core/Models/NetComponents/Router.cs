@@ -17,8 +17,30 @@ namespace RoutingApp.Core.Models.NetComponents
         #region Fields
 
         public Guid Id { get; set; }
-        public int RouterInSystemId { get; set; }
-        public string Name { get; set; }
+
+        [XmlIgnore]
+        private int _routerInSystemId;
+        public int RouterInSystemId
+        {
+            get
+            {
+                return _routerInSystemId;
+            }
+            set
+            {
+                _routerInSystemId = value;
+                RouterIndexChanged?.Invoke(Name);
+            }
+        }
+
+        [XmlIgnore]
+        public Action<string> RouterIndexChanged;
+
+        [XmlIgnore]
+        private string _name;
+        public string Name { get {
+                return "router" + RouterInSystemId;
+            } set { _name = value; } }
         public Interface[] Interfaces { get; set; }
         public bool IsActive { get; set; }
 
@@ -132,6 +154,24 @@ namespace RoutingApp.Core.Models.NetComponents
 
                     packetToSend.Link.Metric -= packetToSend.Speed;
                 }
+                else
+                {
+                    //check destination router still exists
+                    if (!packetToSend.SendingToRouter.IsActive)
+                    {
+                        LoggerService.Log("Previous router disconencted. Changed direction");
+                        packetToSend.SendingToRouter = GetNextTransitionRouter(packetToSend.Traffic.DestinationRouter);
+                        packetToSend.Link = GetLinkToRouter(packetToSend.SendingToRouter);
+                        packetToSend.Speed = Math.Min(packetToSend.Link.Metric, packetToSend.Traffic.DesiredBandWidth);
+                        packetToSend.IsSending = true;
+                        packetToSend.Progress = 0;
+                    }
+                }
+                if (packetToSend.IsJustReceived == true)
+                {
+                    packetToSend.IsJustReceived = false;
+                    continue;
+                }
 
                 //send here
                 packetToSend.Progress += 100 * (packetToSend.Speed * (double)Constants.UPDATE_TIME / 1000) / packetToSend.Size; //convert to seconds
@@ -142,6 +182,7 @@ namespace RoutingApp.Core.Models.NetComponents
                     CashedPackets.Remove(packetToSend);
 
                     packetToSend.IsSending = false;
+                    packetToSend.IsJustReceived = true;
                     packetToSend.Progress = 0;
 
                     packetToSend.Link.Metric += packetToSend.Speed;
@@ -161,16 +202,14 @@ namespace RoutingApp.Core.Models.NetComponents
                         packetToSend.SendingToRouter.CashedPackets.Add(packetToSend);
                     }
                 }
-
-
-
             }
         }
 
         public Router GetNextTransitionRouter(Router destinationRouter)
         {
             var closestRouterRoutingItem = RoutingTable.FirstOrDefault(x => x.DestinationRouter == destinationRouter);
-            if (closestRouterRoutingItem == null || closestRouterRoutingItem.IsExpired)
+
+            if (closestRouterRoutingItem == null || closestRouterRoutingItem.IsExpired || !closestRouterRoutingItem.ClosestRouter.IsActive)
             {
                 if (closestRouterRoutingItem != null) RoutingTable.Remove(closestRouterRoutingItem);
                 closestRouterRoutingItem = new RoutingTableItem
