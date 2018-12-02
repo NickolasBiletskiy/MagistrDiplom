@@ -16,20 +16,26 @@ namespace RoutingApp.Core.Models.NetComponents
         public Interface Interface1 { get; set; }
         [XmlIgnore]
         public Interface Interface2 { get; set; }
+        [XmlIgnore]
+        public Action<int> MetricChanged;
 
         //Metric fields
-        //Currently metric is only length
+        //Currently metric is only length   
+
         [XmlIgnore]
+        private int _metric;
         public int Metric
         {
             get
             {
-                return AvailableBandWidth;
+                return _metric;
             }
-            private set { }
+            set
+            {
+                _metric = value;
+                MetricChanged?.Invoke(Metric);
+            }
         }
-
-        public int AvailableBandWidth { get; set; }
 
         #endregion
 
@@ -45,7 +51,7 @@ namespace RoutingApp.Core.Models.NetComponents
             Interface1 = int1;
             Interface2 = int2;
             IsActive = true;
-            AvailableBandWidth = Constants.LINK_MAX_BANDWIDH;
+            Metric = Constants.LINK_MAX_BANDWIDH;
             Name = int1.FullName + NameSplitters.INTERFACES_SPLITTER + int2.FullName;
         }
 

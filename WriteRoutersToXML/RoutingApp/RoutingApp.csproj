@@ -59,6 +59,7 @@
     <Compile Include="CreateTrafficPopup.xaml.cs">
       <DependentUpon>CreateTrafficPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HSLColorHelper.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
     <Page Include="Controls\WorkingRouter.xaml">

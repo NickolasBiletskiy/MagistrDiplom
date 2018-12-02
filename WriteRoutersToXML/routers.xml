@@ -12,7 +12,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int0|router2-Int0</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -22,7 +22,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int1|router3-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -57,7 +57,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router1-Int0|router2-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -67,7 +67,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router4-Int2|router1-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -102,7 +102,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int0|router2-Int0</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -112,7 +112,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router1-Int0|router2-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -122,7 +122,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router2-Int2|router4-Int0</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -152,7 +152,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router3-Int0|router4-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -162,7 +162,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router0-Int1|router3-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -197,7 +197,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router2-Int2|router4-Int0</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -207,7 +207,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router3-Int0|router4-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>
@@ -217,7 +217,7 @@
         <Link>
           <IsActive>true</IsActive>
           <Name>router4-Int2|router1-Int1</Name>
-          <AvailableBandWidth>100</AvailableBandWidth>
+          <Metric>100</Metric>
         </Link>
       </Interface>
       <Interface>

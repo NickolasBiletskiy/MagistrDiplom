@@ -28,22 +28,22 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="Enter router from" Grid.Row="0" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-        <TextBox x:Name="routerFrom" Grid.Row="0" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+        <TextBox x:Name="routerFrom" Grid.Row="0" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center"></TextBox>
 
         <TextBlock Text="Enter router to" Grid.Row="1" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-        <TextBox x:Name="routerTo" Grid.Row="1" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+        <TextBox x:Name="routerTo" Grid.Row="1" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center"></TextBox>
 
         <TextBlock Text="Number of packets" Grid.Row="2" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-        <TextBox x:Name="numberOfPackets" Grid.Row="2" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+        <TextBox x:Name="numberOfPackets" Grid.Row="2" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center"></TextBox>
 
         <TextBlock Text="Size of packets" Grid.Row="3" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-        <TextBox x:Name="sizeOfPackets" Grid.Row="3" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+        <TextBox x:Name="sizeOfPackets" Grid.Row="3" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center"></TextBox>
 
         <TextBlock Text="Desired speed" Grid.Row="4" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-        <TextBox x:Name="desiredSpeed" Grid.Row="4" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+        <TextBox x:Name="desiredSpeed" Grid.Row="4" Grid.Column="1"  Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center"></TextBox>
 
         <TextBlock Text="Traffic name" Grid.Row="5" Grid.Column="0" Margin="10 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-        <TextBox x:Name="trafficName" Grid.Row="5" Grid.Column="1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto"></TextBox>
+        <TextBox x:Name="trafficName" Grid.Row="5" Grid.Column="1" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center"></TextBox>
 
         <Button x:Name="buttonOk" Grid.Row="6" Grid.Column="0" Content="OK" Margin="5 5 5 5" Click="buttonOk_Click"></Button>
         <Button x:Name="buttonCancel" Grid.Row="6" Grid.Column="1" Content="Cancel"  Margin="5 5 5 5" Click="buttonCancel_Click"></Button>

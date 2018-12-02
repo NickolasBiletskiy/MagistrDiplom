@@ -87,6 +87,7 @@ namespace RoutingApp.Core.Services
                     paragraph.Inlines.Add(string.Format(_logFooterPatern, _logTypeHeader[logType]));
                     paragraph.Inlines.Add(new LineBreak());
                     OutPutTextBox.Document.Blocks.Add(paragraph);
+                    OutPutTextBox.ScrollToEnd();
 
                 }), DispatcherPriority.ContextIdle);
             }
@@ -103,6 +104,7 @@ namespace RoutingApp.Core.Services
                     paragraph.Inlines.Add(message);
                     paragraph.Inlines.Add(new LineBreak());
                     OutPutTextBox.Document.Blocks.Add(paragraph);
+                    OutPutTextBox.ScrollToEnd();
 
                 }), DispatcherPriority.ContextIdle);
             }
@@ -118,6 +120,7 @@ namespace RoutingApp.Core.Services
                     paragraph.Inlines.Add(message);
                     paragraph.Inlines.Add(new LineBreak());
                     OutPutTextBox.Document.Blocks.Add(paragraph);
+                    OutPutTextBox.ScrollToEnd();
                 }), DispatcherPriority.ContextIdle);
             }
         }

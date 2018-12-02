@@ -446,7 +446,7 @@ namespace RoutingApp.Core.Models.NetComponents
             {
                 InitSimulation();
             }
-            Task.Run(() => { _systemSimulator.SimulateStep = false; });
+            Task.Run(() => { _systemSimulator.SimulateStep = true; });
         }
 
         public void PauseSimulation()

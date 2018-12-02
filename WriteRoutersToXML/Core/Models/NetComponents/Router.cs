@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Core.Services;
+using RoutingApp.Core.Models.Interfaces;
+using RoutingApp.Core.Models.Routing;
+using RoutingApp.Core.Models.SystemSimulation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
-using Core.Services;
-using RoutingApp.Core.Models.Interfaces;
-using RoutingApp.Core.Models.Routing;
-using RoutingApp.Core.Models.SystemSimulation;
-using RoutingApp.Core.Services;
 
 namespace RoutingApp.Core.Models.NetComponents
 {
@@ -129,31 +128,30 @@ namespace RoutingApp.Core.Models.NetComponents
                     packetToSend.IsSending = true;
                     packetToSend.SendingToRouter = GetNextTransitionRouter(packetToSend.Traffic.DestinationRouter);
                     packetToSend.Link = GetLinkToRouter(packetToSend.SendingToRouter);
-                    packetToSend.Speed = Math.Min(packetToSend.Link.AvailableBandWidth, packetToSend.Traffic.DesiredBandWidth);
+                    packetToSend.Speed = Math.Min(packetToSend.Link.Metric, packetToSend.Traffic.DesiredBandWidth);
 
-                    packetToSend.Link.AvailableBandWidth -= packetToSend.Speed;
+                    packetToSend.Link.Metric -= packetToSend.Speed;
                 }
 
                 //send here
                 packetToSend.Progress += 100 * (packetToSend.Speed * (double)Constants.UPDATE_TIME / 1000) / packetToSend.Size; //convert to seconds
-                //Console.WriteLine($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
-                LoggerService.Log($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
+                LoggerService.Log($"{packetToSend.Traffic.Name}: packet ID={packetToSend.PacketID + 1}/{packetToSend.Traffic.Packets.Count}  from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.Traffic.DestinationRouter.RouterInSystemId} through {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
                 // check packet is sent
                 if (packetToSend.Progress >= 100)
                 {
                     CashedPackets.Remove(packetToSend);
-                    
-                    packetToSend.IsSending =  false;
+
+                    packetToSend.IsSending = false;
                     packetToSend.Progress = 0;
 
-                    packetToSend.Link.AvailableBandWidth += packetToSend.Speed;
+                    packetToSend.Link.Metric += packetToSend.Speed;
                     packetToSend.Link = null;
                     packetToSend.Speed = 0;
 
                     //packet came to final router
                     if (packetToSend.SendingToRouter == packetToSend.Traffic.DestinationRouter)
                     {
-                        Console.WriteLine($"Packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} received destination router.");
+                        LoggerService.Log($"Packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} received destination router.");
                         packetToSend.IsTransmitted = true;
                         packetToSend.Traffic.TransmittedPackets.Add(packetToSend);
                         packetToSend.SendingToRouter.ReceivedPackets.Add(packetToSend);
@@ -200,7 +198,7 @@ namespace RoutingApp.Core.Models.NetComponents
                 string anotherRouterName = (inter.Link.Interface1 == inter) ? inter.Link.Interface2.Router.Name : inter.Link.Interface1.Router.Name;
                 result.Append($"Connection to {anotherRouterName} using {inter.FullName}, Metric = {inter.Link.Metric} \n");
 
-            });            
+            });
             return result.ToString();
         }
 

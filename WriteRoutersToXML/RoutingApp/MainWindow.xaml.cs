@@ -2,6 +2,7 @@
 using RoutingApp.Core;
 using RoutingApp.Core.Models.NetComponents;
 using RoutingApp.Core.Services;
+using RoutingApp.Helpers;
 using RoutingApp.ViewModels;
 using System.Collections.Generic;
 using System.Configuration;
@@ -55,6 +56,10 @@ namespace RoutingApp
         {
             RouterSerializeService.defaultFilePath = defaultFilePath;
             Controller.Instance.SetLogger(LoggerService.Instance);
+
+            //var green = HSLColorHelper.RGBFromHSL(228, 100, 50);
+            //var yellow = HSLColorHelper.RGBFromHSL(60, 100, 50);
+            //var blue = HSLColorHelper.RGBFromHSL(245, 100, 50);
 
             routers = new List<Router>();
 
