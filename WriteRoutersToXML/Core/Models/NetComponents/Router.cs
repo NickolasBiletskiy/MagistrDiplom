@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using Core.Services;
 using RoutingApp.Core.Models.Interfaces;
 using RoutingApp.Core.Models.Routing;
 using RoutingApp.Core.Models.SystemSimulation;
@@ -34,6 +35,9 @@ namespace RoutingApp.Core.Models.NetComponents
 
         [XmlIgnore]
         public List<RoutingTableItem> RoutingTable = new List<RoutingTableItem>();  //destination router, first router in the path
+
+        [XmlIgnore]
+        public ILogger LoggerService;
 
         #endregion
 
@@ -133,7 +137,7 @@ namespace RoutingApp.Core.Models.NetComponents
                 //send here
                 packetToSend.Progress += 100 * (packetToSend.Speed * (double)Constants.UPDATE_TIME / 1000) / packetToSend.Size; //convert to seconds
                 //Console.WriteLine($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
-                LoggerCore.Instance.Log($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
+                LoggerService.Log($"Sending packet ID={packetToSend.PacketID} for traffic {packetToSend.Traffic.Name} from {packetToSend.CurrentRouter.RouterInSystemId} to {packetToSend.SendingToRouter.RouterInSystemId}. Progression = {packetToSend.Progress}");
                 // check packet is sent
                 if (packetToSend.Progress >= 100)
                 {

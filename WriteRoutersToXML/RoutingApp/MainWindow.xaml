@@ -64,15 +64,42 @@
                 </StackPanel>
             </GroupBox>
             <GroupBox Margin="0 0 10 0" Header="Generate traffic">
-                <Button x:Name="initTrafficBtn" Style="{StaticResource topPanelBtn}" Click="btnInitTraffic_Click">
+                <Button x:Name="initTrafficBtn" Style="{StaticResource topPanelBtn}" Click="btnInitTraffic_Click" Margin="0">
                     <Image Source="Images/mailIcon.png"></Image>
                 </Button>
+            </GroupBox>
+            <GroupBox Margin="0 0 10 0" Header="Simulation">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="playSimulation" Style="{StaticResource topPanelBtn}" BorderThickness="0" Width="32" Height="32" Click="playSimulation_Click">
+                        <Rectangle Width="32" Height="32">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="Images/mediaControlsSprite.png"
+                    ViewboxUnits="Absolute" Viewbox="520,-10,170,170"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+                    <Button x:Name="pauseSimulation" Style="{StaticResource topPanelBtn}" BorderThickness="0" Width="32" Height="32" Click="pauseSimulation_Click">
+                        <Rectangle Width="32" Height="32">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="Images/mediaControlsSprite.png"
+                    ViewboxUnits="Absolute" Viewbox="265,-10,170,170"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+                    <Button x:Name="nextStepSimulation" Style="{StaticResource topPanelBtn}" BorderThickness="0" Width="32" Height="32" Click="nextStepSimulation_Click">
+                        <Rectangle Width="32" Height="32">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="Images/mediaControlsSprite.png"
+                    ViewboxUnits="Absolute" Viewbox="495,520,200,170"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
             </GroupBox>
 
         </StackPanel>
         <ScrollViewer Grid.Column="0" Grid.Row="1" Background="AntiqueWhite" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Canvas Width="3000" Height="3000" x:Name="WorkingArea">
-                <!--<Control:WorkingRouter Canvas.Left="10" Canvas.Top="10"></Control:WorkingRouter>-->
             </Canvas>
         </ScrollViewer>
 

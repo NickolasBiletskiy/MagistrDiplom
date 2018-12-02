@@ -1,4 +1,5 @@
-﻿using RoutingApp.Core.Models.NetComponents;
+﻿using Core.Services;
+using RoutingApp.Core.Models.NetComponents;
 using RoutingApp.Core.Services;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +12,8 @@ namespace RoutingApp.Core
     {
 
         #region Fields
+        
+        public ILogger LoggerService { get; set; }
 
         private bool _isPaused;
         public bool IsPaused
@@ -25,6 +28,21 @@ namespace RoutingApp.Core
                 }
             }
         }
+
+        private bool _simulateStep;
+        public bool SimulateStep
+        {
+            get { return _simulateStep; }
+            set
+            {
+                _simulateStep = value;
+                if (_simulateStep)
+                {
+                    Update();
+                }
+            }
+        }
+
         public List<Router> Routers { get; set; }
         private int _stepCount = 0;
 
@@ -46,12 +64,20 @@ namespace RoutingApp.Core
         public void Update()
         {
             Stopwatch stopwatch;
-            while (!IsPaused)
+            while (!IsPaused || SimulateStep)
             {
                 _stepCount++;
                 stopwatch = Stopwatch.StartNew();
 
-                LoggerCore.Instance.Log($"************System simulation, step #{_stepCount} ************");
+                if (SimulateStep)
+                {
+                    LoggerService.Log($"************One-step simulation, step #{_stepCount} ************");
+                    _simulateStep = false;
+                }
+                else
+                {
+                    LoggerService.Log($"************System simulation, step #{_stepCount} ************");
+                }
 
                 bool isSimulationNeeded = false;
                 //update code here
@@ -67,11 +93,11 @@ namespace RoutingApp.Core
                 stopwatch.Stop();
                 var elapsedMiliseconds = stopwatch.ElapsedMilliseconds;
 
-                LoggerCore.Instance.Log($"SystemSimulation: elapsedTime = {elapsedMiliseconds}");
+                LoggerService.Log($"SystemSimulation: elapsedTime = {elapsedMiliseconds}");
 
                 if (!isSimulationNeeded)
                 {
-                    LoggerCore.Instance.Log($"No traffic left, simulation stopped");
+                    LoggerService.Log($"No traffic left, simulation stopped");
                     IsPaused = true;
                 }
 

@@ -1,4 +1,5 @@
 ﻿using RoutingApp.Controls;
+using RoutingApp.Core;
 using RoutingApp.Core.Models.NetComponents;
 using RoutingApp.Core.Services;
 using RoutingApp.ViewModels;
@@ -38,7 +39,7 @@ namespace RoutingApp
         static string defaultFilePath = ConfigurationManager.AppSettings["dataDefaultFilePath"];
 
         public List<Router> routers;
-        public List<Link> links;
+        public List<Link> links = new List<Link>();
         public List<WorkingRouter> routerViewModels;
         public List<ConnectionViewModel> connections;
 
@@ -48,13 +49,14 @@ namespace RoutingApp
 
         //Link creating
         private WorkingRouter routerFrom;
-        private WorkingRouter routerTo;
         private bool linkDrawingStarted;
 
         public MainWindow()
         {
             RouterSerializeService.defaultFilePath = defaultFilePath;
-            Controller.Instance.LoggerService = LoggerService.Instance;
+            Controller.Instance.SetLogger(LoggerService.Instance);
+
+            routers = new List<Router>();
 
             InitializeComponent();
 
@@ -116,6 +118,24 @@ namespace RoutingApp
             popUpWindow.ShowDialog();
         }
 
+        private void playSimulation_Click(object sender, RoutedEventArgs e)
+        {
+            programState = ProgramState.Simulation;
+            Controller.Instance.StartSimulation();
+        }
+
+        private void pauseSimulation_Click(object sender, RoutedEventArgs e)
+        {
+            programState = ProgramState.Edition;
+            Controller.Instance.PauseSimulation();
+        }
+
+        private void nextStepSimulation_Click(object sender, RoutedEventArgs e)
+        {
+            programState = ProgramState.Edition;
+            Controller.Instance.SimulateOneStep();
+        }
+
         //Handle router click events and do different actions depending on state
         public void workingRouter_Click(object sender, RoutedEventArgs e)
         {
@@ -134,6 +154,7 @@ namespace RoutingApp
                         }
                         connections.RemoveAll(x => x.RouterFrom == senderRouter || x.RouterTo == senderRouter);
 
+                        routers.Remove(senderRouter.Router);
                         routerViewModels.Remove(senderRouter);
                         WorkingArea.Children.Remove(senderRouter);
 
@@ -180,7 +201,12 @@ namespace RoutingApp
 
                             //Controller.Instance.Con
                             Controller.Instance.CreateConnections(routerFrom.Router, senderRouter.Router);
-                            connections.Add(new ConnectionViewModel(routerFrom, senderRouter, tempLine, routerFrom.Router.GetLinkToRouter(senderRouter.Router)));
+
+                            var link = routerFrom.Router.GetLinkToRouter(senderRouter.Router);
+
+                            connections.Add(new ConnectionViewModel(routerFrom, senderRouter, tempLine, link));
+                            links.Add(link);
+
                             WorkingArea.Children.Add(tempLine);
 
                             linkDrawingStarted = false;
@@ -290,6 +316,7 @@ namespace RoutingApp
         private void btnAddRouter_Click(object sender, RoutedEventArgs e)
         {
             var router = Controller.Instance.AddNewRouter();
+            routers.Add(router);
             WorkingRouter routerControl = new WorkingRouter(router);
             routerControl.OnRouterMove += UpdateLinksOnRouterMove;
             routerControl.PreviewMouseDown += workingRouter_Click;
@@ -389,6 +416,5 @@ namespace RoutingApp
         }
 
         #endregion
-
     }
 }

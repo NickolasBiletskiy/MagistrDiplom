@@ -18,14 +18,17 @@ namespace RoutingApp.Core.Services
         {
             {LogType.ControllerLog, new SolidColorBrush(Colors.Red) },
             {LogType.RouterLog, new SolidColorBrush(Colors.Green) },
-            {LogType.Paths, new SolidColorBrush(Colors.Yellow)}
+            {LogType.Paths, new SolidColorBrush(Colors.Brown)},
+            {LogType.Simulation, (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"))
+    }
         };
 
         private static Dictionary<LogType, string> _logTypeHeader = new Dictionary<LogType, string>
         {
             {LogType.ControllerLog, "Controller logging" },
             {LogType.RouterLog, "Router logging" },
-            {LogType.Paths, "Paths logging" }
+            {LogType.Paths, "Paths logging" },
+            {LogType.Simulation, "SimulationLogging" }
         };
 
         public RichTextBox OutPutTextBox { get; set; }
@@ -79,6 +82,7 @@ namespace RoutingApp.Core.Services
                     var paragraph = new Paragraph();
                     paragraph.Foreground = _logColor[logType];
                     paragraph.Inlines.Add(string.Format(_logHeaderPatern, _logTypeHeader[logType]));
+                    paragraph.Inlines.Add(new LineBreak());
                     paragraph.Inlines.Add(message);
                     paragraph.Inlines.Add(string.Format(_logFooterPatern, _logTypeHeader[logType]));
                     paragraph.Inlines.Add(new LineBreak());

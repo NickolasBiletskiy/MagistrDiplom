@@ -65,6 +65,10 @@ namespace RoutingApp.Core.Models.NetComponents
         public void InitializeController(List<Router> routers)
         {
             _routers = routers;
+            foreach(var router in _routers)
+            {
+                router.LoggerService = LoggerService;
+            }
             _activeTraffic = new List<Traffic>();
             _allPaths = new Dictionary<Tuple<Router, Router>, List<Path>>();
 
@@ -72,6 +76,11 @@ namespace RoutingApp.Core.Models.NetComponents
 
             LoggerService.CustomizeOutput(LogType.RouterLog, LogRouterConnections());
         }                         
+
+        public void SetLogger(ILogger logger)
+        {
+            LoggerService = logger;
+        }
 
         public Router GetClothestRouter(Router routerFrom, Router routerTo)
         {
@@ -109,6 +118,7 @@ namespace RoutingApp.Core.Models.NetComponents
             int lastRouterIndex = _routers.OrderByDescending(x => x.RouterInSystemId).Select(x => x.RouterInSystemId).FirstOrDefault();
             if (_routers.Count == 0) lastRouterIndex = -1;
             Router router = new Router("router" + ++lastRouterIndex);
+            router.LoggerService = LoggerService;
             router.RouterInSystemId = lastRouterIndex;
             _routers.Add(router);
 
@@ -418,11 +428,25 @@ namespace RoutingApp.Core.Models.NetComponents
         public void InitSimulation()
         {
             _systemSimulator = new SystemSimulator(_routers);
+            _systemSimulator.LoggerService = LoggerService;
         }
 
         public void StartSimulation()
         {
+            if (_systemSimulator == null)
+            {
+                InitSimulation();
+            }
             Task.Run(() => {_systemSimulator.IsPaused = false; });
+        }
+
+        public void SimulateOneStep()
+        {
+            if (_systemSimulator == null)
+            {
+                InitSimulation();
+            }
+            Task.Run(() => { _systemSimulator.SimulateStep = false; });
         }
 
         public void PauseSimulation()

@@ -6,7 +6,8 @@ namespace Core.Services
     {
         ControllerLog,
         RouterLog,
-        Paths
+        Paths,
+        Simulation
     }
 
     public interface ILogger
