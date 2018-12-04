@@ -10,15 +10,17 @@
             PreviewMouseDown="Control_MouseLeftButtonDown"
         PreviewMouseUp="Control_MouseLeftButtonUp"
         PreviewMouseMove="Control_MouseMove">
-
-    <Image Source="../Images/routerIcon.png"
+    <Canvas>
+        <Image Canvas.Left="-32.5" Canvas.Top="-32.5" Source="../Images/routerIcon.png"
                        Height="65"
                         Width="65"
                         Margin="0">
-        <Image.ToolTip>
-            <ToolTip Name="RouterToolTip"></ToolTip>
-        </Image.ToolTip>
-    </Image>
+            <Image.ToolTip>
+                <ToolTip Name="RouterToolTip"></ToolTip>
+            </Image.ToolTip>
+        </Image>
+        <TextBlock Name="RouterName" Height="38" Canvas.Left="5" Canvas.Top="-32" Width="28" FontSize="25" Background="White" Foreground="Green" TextAlignment="Center" RenderTransformOrigin="1.211,0.31"></TextBlock>
+    </Canvas>
 
 </Button>
 

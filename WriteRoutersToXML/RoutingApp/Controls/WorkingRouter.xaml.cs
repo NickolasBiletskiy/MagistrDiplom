@@ -91,6 +91,7 @@ namespace RoutingApp.Controls
             {
                 var toolTip = this.FindName("RouterToolTip") as ToolTip;
 
+                RouterName.Text = Router.RouterInSystemId.ToString();
                 toolTip.Content = Router.Name;
             }));
         }
