@@ -43,6 +43,8 @@ namespace RoutingApp
         public List<Link> links = new List<Link>();
         public List<WorkingRouter> routerViewModels;
         public List<ConnectionViewModel> connections;
+        public WorkingController controllerUI;
+        public List<ControllerConnectionViewModel> controllerConnections;
 
         private EditorState editorState = EditorState.RouterMove;
         private ProgramState programState = ProgramState.Edition;
@@ -61,11 +63,15 @@ namespace RoutingApp
 
             InitializeComponent();
 
+            InitControllerUI();
+
             InitTopPanelButtonEventHandlers();
 
             LoggerService.Instance.OutPutTextBox = ConsoleOutput;
             connections = new List<ConnectionViewModel>();
             routerViewModels = new List<WorkingRouter>();
+
+            controllerConnections = new List<ControllerConnectionViewModel>();
             //AddRoutersToCanvas();
         }
 
@@ -158,6 +164,13 @@ namespace RoutingApp
                         routers.Remove(senderRouter.Router);
                         routerViewModels.Remove(senderRouter);
                         WorkingArea.Children.Remove(senderRouter);
+
+                        var controllerConnection = controllerConnections.FirstOrDefault(x => x.Router == senderRouter);
+                        if (controllerConnection != null)
+                        {
+                            WorkingArea.Children.Remove(controllerConnection.Line);
+                            controllerConnections.Remove(controllerConnection);
+                        }
 
                         Controller.Instance.RemoveRouter(senderRouter.Router);
                         break;
@@ -320,9 +333,12 @@ namespace RoutingApp
             routers.Add(router);
             WorkingRouter routerControl = new WorkingRouter(router);
             routerControl.OnRouterMove += UpdateLinksOnRouterMove;
+            routerControl.OnRouterMove += UpdateControllerLinkOnRouterMove;
             routerControl.PreviewMouseDown += workingRouter_Click;
             routerViewModels.Add(routerControl);
             WorkingArea.Children.Add(routerControl);
+
+            controllerConnections.Add(CreateControllerConnectionViewModel(routerControl));
             var a = 5;
         }
 
@@ -339,10 +355,17 @@ namespace RoutingApp
         public void AddRoutersToCanvas()
         {
             WorkingArea.Children.Clear();
+
+            InitControllerUI();
+
+            connections.Clear();
+            controllerConnections.Clear();
+
             foreach (Router router in routers)
             {
                 WorkingRouter routerControl = new WorkingRouter(router);
                 routerControl.OnRouterMove += UpdateLinksOnRouterMove;
+                routerControl.OnRouterMove += UpdateControllerLinkOnRouterMove;
                 routerControl.PreviewMouseDown += workingRouter_Click;
                 WorkingArea.Children.Add(routerControl);
 
@@ -354,6 +377,8 @@ namespace RoutingApp
                 }
 
                 routerViewModels.Add(routerControl);
+
+                controllerConnections.Add(CreateControllerConnectionViewModel(routerControl));
             }
         }
 
@@ -389,6 +414,25 @@ namespace RoutingApp
             return line;
         }
 
+        private ControllerConnectionViewModel CreateControllerConnectionViewModel(WorkingRouter router)
+        {
+            Line line = new Line();
+            line.X1 = router.Router.PositionX + routerPositionCorrective;
+            line.Y1 = router.Router.PositionY + routerPositionCorrective;
+            line.X2 = controllerUI.PositionX + routerPositionCorrective;
+            line.Y2 = controllerUI.PositionY + routerPositionCorrective;
+            line.Stroke = new SolidColorBrush(Colors.Blue);
+            line.StrokeDashArray = new DoubleCollection(new double[1] { 15 });
+            line.StrokeThickness = 0.5;
+
+            WorkingArea.Children.Add(line);
+            return new ControllerConnectionViewModel
+            {
+                Line = line,
+                Router = router
+            };
+        }
+
         public void UpdateLinksOnRouterMove(WorkingRouter routerView)
         {
             //update links to router
@@ -407,6 +451,47 @@ namespace RoutingApp
                 line.X2 = connection.RouterTo.Router.PositionX + routerPositionCorrective;
                 line.Y2 = connection.RouterTo.Router.PositionY + routerPositionCorrective;
             }
+        }
+
+        public void UpdateControllerLinkOnRouterMove(WorkingRouter routerView)
+        {
+            var controllerConnectionViewModel = controllerConnections.FirstOrDefault(x => x.Router == routerView);
+            if (controllerConnectionViewModel == null) return;
+
+            var line = controllerConnectionViewModel.Line;
+            line.X1 = controllerUI.PositionX + routerPositionCorrective;
+            line.Y1 = controllerUI.PositionY + routerPositionCorrective;
+            line.X2 = routerView.Router.PositionX + routerPositionCorrective;
+            line.Y2 = routerView.Router.PositionY + routerPositionCorrective;
+        }
+
+        public void UpdateControllerLinksOnControllerMove()
+        {
+            foreach(var connection in controllerConnections)
+            {
+                var line = connection.Line;
+                line.X1 = controllerUI.PositionX + routerPositionCorrective;
+                line.Y1 = controllerUI.PositionY + routerPositionCorrective;
+                line.X2 = connection.Router.Router.PositionX + routerPositionCorrective;
+                line.Y2 = connection.Router.Router.PositionY + routerPositionCorrective;
+            }
+        }
+
+        public void InitControllerUI()
+        {
+            if (controllerUI == null)
+            {
+                controllerUI = new WorkingController
+                {
+                    PositionX = 150,
+                    PositionY = 10
+                };
+                controllerUI.OnControllerMove += UpdateControllerLinksOnControllerMove;
+            }
+
+            WorkingArea.Children.Add(controllerUI);
+            Canvas.SetLeft(controllerUI, controllerUI.PositionX);
+            Canvas.SetTop(controllerUI, controllerUI.PositionY);
         }
 
         #region MessageBoxes

@@ -80,7 +80,7 @@ namespace RoutingApp.Controls
                     Canvas.SetLeft(this, Router.PositionX);
                     Canvas.SetTop(this, Router.PositionY);
 
-                    OnRouterMove?.Invoke(this);
+                    OnRouterMove?.Invoke (this);
                 }
             }
         }

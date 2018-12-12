@@ -56,12 +56,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\WorkingController.xaml.cs">
+      <DependentUpon>WorkingController.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CreateTrafficPopup.xaml.cs">
       <DependentUpon>CreateTrafficPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\HSLColorHelper.cs" />
     <Compile Include="Services\LoggerService.cs" />
     <Compile Include="ViewModels\ConnectionViewModel.cs" />
+    <Compile Include="ViewModels\ControllerConnectionViewModel.cs" />
+    <Page Include="Controls\WorkingController.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\WorkingRouter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -141,6 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\mediaControlsSprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\controller.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
