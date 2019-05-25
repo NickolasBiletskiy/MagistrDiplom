@@ -98,7 +98,7 @@
             </GroupBox>
 
         </StackPanel>
-        <ScrollViewer Grid.Column="0" Grid.Row="1" Background="AntiqueWhite" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="0" Grid.Row="1" Background="White" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <Canvas Width="3000" Height="3000" x:Name="WorkingArea">
             </Canvas>
         </ScrollViewer>
