@@ -1,15 +1,16 @@
 ﻿using Core.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace RoutingApp.Core.Services
+namespace RoutingApp.Services
 {
-    public class LoggerService : ILogger
+    public class LoggerService : ILogger, INotifyPropertyChanged
     {
 
         #region LogTypeMapping
@@ -18,8 +19,8 @@ namespace RoutingApp.Core.Services
         {
             {LogType.ControllerLog, new SolidColorBrush(Colors.Red) },
             {LogType.RouterLog, new SolidColorBrush(Colors.Green) },
-            {LogType.Paths, new SolidColorBrush(Colors.Brown)},
-            {LogType.Simulation, (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"))
+            {LogType.PathsLog, new SolidColorBrush(Colors.Brown)},
+            {LogType.SimulationLog, (SolidColorBrush)(new BrushConverter().ConvertFrom("#ffaacc"))
     }
         };
 
@@ -27,8 +28,8 @@ namespace RoutingApp.Core.Services
         {
             {LogType.ControllerLog, "Controller logging" },
             {LogType.RouterLog, "Router logging" },
-            {LogType.Paths, "Paths logging" },
-            {LogType.Simulation, "SimulationLogging" }
+            {LogType.PathsLog, "Paths logging" },
+            {LogType.SimulationLog, "SimulationLogging" }
         };
 
         public RichTextBox OutPutTextBox { get; set; }
@@ -59,6 +60,24 @@ namespace RoutingApp.Core.Services
             private set { }
         }
 
+        //TODO: debug stub. Delete after fix
+        public int CurrentStep = 3;
+        public List<LogStep> LogStepsList = new List<LogStep>
+        {
+           new LogStep{
+               StepNumber = 1,
+               ControllerLogs = new List<string>{"controllerLog1", "controllerLog2", "controllerLog3"},
+               PathsLog = new List<string>{ "PathsLog1", "PathsLog2", "PathsLog3" }               
+           },
+           new LogStep{
+               StepNumber = 2,
+               ControllerLogs = new List<string>{"controllerLogsStep2_1", "controllerLogsStep2_2", "controllerLogsStep2_3" },
+               PathsLog = new List<string>{ "PathsLogStep2_1", "PathsLogStep2_2", "PathsLogStep2_3" }               
+           }
+        };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
 
         #region cstor
@@ -72,8 +91,13 @@ namespace RoutingApp.Core.Services
 
         #region Public methods
 
+        public void OnPropertyChanged(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
         //action - output code must be here
-        public void CustomizeOutput(LogType logType, string message)
+        public void Log(LogType logType, string message)
         {
             if (OutPutTextBox != null)
             {
@@ -124,7 +148,30 @@ namespace RoutingApp.Core.Services
                 }), DispatcherPriority.ContextIdle);
             }
         }
+        //used for adding start header
+        public void StartLog(int stepcount)
+        {
+            LogStepsList.Add(new LogStep
+            {
+                StepNumber = CurrentStep,
+                ControllerLogs = new List<string> { $"controllerLog. Step {CurrentStep}, log 1", $"controllerLog. Step {CurrentStep}, log 2", $"controllerLog. Step {CurrentStep}, log 3" },
+                PathsLog = new List<string> { $"PathsLog. Step {CurrentStep}. Log1", $"PathsLog. Step {CurrentStep}. Log2", $"PathsLog. Step {CurrentStep}. Log3" }
+            });
+            CurrentStep++;
+        }
+
+        public void SubmitLog()
+        {
+            OnPropertyChanged("LogStepsList");
+        }
 
         #endregion
+    }
+
+    public class LogStep
+    {
+        public int StepNumber { get; set; }
+        public List<string> ControllerLogs { get; set; }
+        public List<string> PathsLog { get; set; }
     }
 }

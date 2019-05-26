@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RoutingApp"
         xmlns:Control="clr-namespace:RoutingApp.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="1000">
+        Title="MainWindow" Height="650" MinWidth="1100" Width="1100">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"></RowDefinition>
@@ -14,9 +14,9 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="0.7*"></ColumnDefinition>
             <ColumnDefinition Width="3"></ColumnDefinition>
-            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+            <ColumnDefinition Width="0.3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0"                   
@@ -104,20 +104,21 @@
         </ScrollViewer>
 
         <GridSplitter Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ></GridSplitter>
-        <GroupBox x:Name="LoggingTypeGroup"  Grid.Column="2" Grid.Row="0" Header="Logging setup">
+        <!--<GroupBox x:Name="LoggingTypeGroup"  Grid.Column="2" Grid.Row="0" Header="Logging setup">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="CheckBox">
                         <Setter Property="HorizontalAlignment" Value="Center"></Setter>
                         <Setter Property="Margin" Value="0 0 0 5"></Setter>
                         <Setter Property="DockPanel.Dock" Value="Bottom"></Setter>
-                        <!--<Setter Property="VerticalAlignment" Value="Bottom"></Setter>-->
+                        --><!--<Setter Property="VerticalAlignment" Value="Bottom"></Setter>--><!--
                     </Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="FontSize" Value="8"></Setter>
@@ -128,26 +129,66 @@
                     </Style>
                 </Grid.Resources>
                 <DockPanel Grid.Column="0" LastChildFill="False">
-                    <TextBlock VerticalAlignment="Top" Text="Controller Init"/>
-                    <CheckBox  x:Name="ControllerInitializations"/>
+                    <TextBlock VerticalAlignment="Top" Text="Controller Log"/>
+                    <CheckBox  x:Name="ControllerLog"/>
                 </DockPanel>
                 <DockPanel Grid.Column="1" LastChildFill="False">
-                    <TextBlock VerticalAlignment="Top" Text="Routes Log"/>
+                    <TextBlock VerticalAlignment="Top" Text="Routers Log"/>
                     <CheckBox  x:Name="RoutesLog"/>
                 </DockPanel>
                 <DockPanel Grid.Column="2" LastChildFill="False">
-                    <TextBlock VerticalAlignment="Top" Text="Packets Trace"/>
-                    <CheckBox  x:Name="PacketsTrace"/>
+                    <TextBlock VerticalAlignment="Top" Text="Paths Log"/>
+                    <CheckBox  x:Name="PathsLog"/>
                 </DockPanel>
                 <DockPanel LastChildFill="False" Grid.Column="3">
-                    <TextBlock VerticalAlignment="Top" Text="Lines State"/>
-                    <CheckBox x:Name="LinesState"/>
+                    <TextBlock VerticalAlignment="Top" Text="Simulation Log"/>
+                    <CheckBox x:Name="SimulationLog"/>
+                </DockPanel>
+                <DockPanel LastChildFill="False" Grid.Column="4">
+                    <TextBlock VerticalAlignment="Top" Text="Lines State Log"/>
+                    <CheckBox x:Name="LinesStateLog"/>
                 </DockPanel>
             </Grid>
-        </GroupBox>
-        <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
-            <RichTextBox x:Name="ConsoleOutput" VerticalScrollBarVisibility="Auto"></RichTextBox>
-        </Grid>
+        </GroupBox>-->
+        <StackPanel Grid.Column="2" Grid.Row="1">
+            <StackPanel.Resources>
+                <Style TargetType="Expander">
+                    <Setter Property="Padding" Value="5 5 0 0"></Setter>
+                </Style>
+                <Style x:Key="LogList">
+                    <Setter Property="ItemsControl.Margin" Value="20 0 0 0"></Setter>
+                </Style>
+            </StackPanel.Resources>
+            <ItemsControl Name="LogList" DataContext="{Binding LogStepsList}" ItemsSource="{Binding }">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Expander>
+                            <Expander.Header>
+                                <TextBlock>
+                                    <Run Text="Step number ="/>
+                                    <Run Text="{Binding Path=StepNumber}"/>
+                                </TextBlock>
+                            </Expander.Header>
+                            <Expander.Content>
+                                <ItemsControl Name="LogList">
+                                    <Expander Header="Controller Logs">
+                                        <Expander.Content>
+                                            <ItemsControl ItemsSource="{Binding Path=ControllerLogs}" Style="{StaticResource LogList}"></ItemsControl>
+                                        </Expander.Content>
+                                    </Expander>
+                                    <Expander Header="Paths Logs">
+                                        <Expander.Content>
+                                            <ItemsControl ItemsSource="{Binding Path=PathsLog}" Style="{StaticResource LogList}"></ItemsControl>
+                                        </Expander.Content>
+                                    </Expander>
+                                </ItemsControl>                    
+                            </Expander.Content>
+                        </Expander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button x:Name="AddNewLogStep" Click="AddNewLogStep_Click" Height="30"></Button>
+        </StackPanel>
 
     </Grid>
 </Window>

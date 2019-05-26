@@ -72,9 +72,9 @@ namespace RoutingApp.Core.Models.NetComponents
             _activeTraffic = new List<Traffic>();
             _allPaths = new Dictionary<Tuple<Router, Router>, List<Path>>();
 
-            LoggerService.CustomizeOutput(LogType.ControllerLog, LogInitializing());
+            LoggerService.Log(LogType.ControllerLog, LogInitializing());
 
-            LoggerService.CustomizeOutput(LogType.RouterLog, LogRouterConnections());
+            LoggerService.Log(LogType.RouterLog, LogRouterConnections());
         }                         
 
         public void SetLogger(ILogger logger)
@@ -99,7 +99,7 @@ namespace RoutingApp.Core.Models.NetComponents
 
             if (bestPath.RoutersInPath.Count > 1)
             {
-                LoggerService.CustomizeOutput(LogType.Paths, LogPaths(routerFrom.RouterInSystemId, routerTo.RouterInSystemId, _allPaths[searchTuple]));
+                LoggerService.Log(LogType.PathsLog, LogPaths(routerFrom.RouterInSystemId, routerTo.RouterInSystemId, _allPaths[searchTuple]));
                 return bestPath.RoutersInPath[1];
             }
 
@@ -109,9 +109,9 @@ namespace RoutingApp.Core.Models.NetComponents
 
         public void GetAllConnections()
         {
-            LoggerService.CustomizeOutput(LogType.ControllerLog, LogInitializing());
+            LoggerService.Log(LogType.ControllerLog, LogInitializing());
 
-            LoggerService.CustomizeOutput(LogType.RouterLog, LogRouterConnections());
+            LoggerService.Log(LogType.RouterLog, LogRouterConnections());
         }
 
         public Router AddNewRouter()
@@ -228,7 +228,7 @@ namespace RoutingApp.Core.Models.NetComponents
             List<Path> currentPaths;
             if (_allPaths.TryGetValue(tuple, out currentPaths))
             {
-                LoggerService.CustomizeOutput(LogType.Paths, LogPaths(routerFrom, routerTo, currentPaths));
+                LoggerService.Log(LogType.PathsLog, LogPaths(routerFrom, routerTo, currentPaths));
                 return currentPaths;
             }
 
@@ -244,7 +244,7 @@ namespace RoutingApp.Core.Models.NetComponents
             //fill alternative paths
             FillReversePaths(tuple, paths);
 
-            LoggerService.CustomizeOutput(LogType.Paths, LogPaths(routerFrom, routerTo, _allPaths[tuple]));            
+            LoggerService.Log(LogType.PathsLog, LogPaths(routerFrom, routerTo, _allPaths[tuple]));            
     
             return _allPaths[tuple];
         }

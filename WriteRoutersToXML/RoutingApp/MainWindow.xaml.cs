@@ -1,10 +1,10 @@
 ﻿using RoutingApp.Controls;
-using RoutingApp.Core;
 using RoutingApp.Core.Models.NetComponents;
 using RoutingApp.Core.Services;
-using RoutingApp.Helpers;
+using RoutingApp.Services;
 using RoutingApp.ViewModels;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -39,6 +39,8 @@ namespace RoutingApp
         static double routerPositionCorrective = 32.5;
         static string defaultFilePath = ConfigurationManager.AppSettings["dataDefaultFilePath"];
 
+        public List<LogStep> LogStepsList { get { return LoggerService.Instance.LogStepsList; } set { } }
+
         public List<Router> routers;
         public List<Link> links = new List<Link>();
         public List<WorkingRouter> routerViewModels;
@@ -62,12 +64,13 @@ namespace RoutingApp
             routers = new List<Router>();
 
             InitializeComponent();
+            DataContext = this;
 
             InitControllerUI();
 
             InitTopPanelButtonEventHandlers();
 
-            LoggerService.Instance.OutPutTextBox = ConsoleOutput;
+            //LoggerService.Instance.OutPutTextBox = ConsoleOutput;
             connections = new List<ConnectionViewModel>();
             routerViewModels = new List<WorkingRouter>();
 
@@ -502,5 +505,14 @@ namespace RoutingApp
         }
 
         #endregion
+
+        //TODO: Debug stub. Delete after testing
+        private void AddNewLogStep_Click(object sender, RoutedEventArgs e)
+        {
+            LoggerService.Instance.StartLog(1);
+            LoggerService.Instance.SubmitLog();
+            LogList.ItemsSource = LogStepsList;
+            LogList.UpdateLayout();
+        }
     }
 }

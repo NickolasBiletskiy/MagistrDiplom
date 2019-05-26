@@ -6,14 +6,17 @@ namespace Core.Services
     {
         ControllerLog,
         RouterLog,
-        Paths,
-        Simulation
+        PathsLog,
+        SimulationLog,
+        LinesStateLog
     }
 
     public interface ILogger
     {
-        void CustomizeOutput(LogType logType, string message);
-        void LogError(string message);
+        void StartLog(int stepcount);
+        void Log(LogType logType, string message);
         void Log(string message);
+        void LogError(string message);
+        void SubmitLog();
     }
 }
