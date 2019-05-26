@@ -104,6 +104,47 @@
         </ScrollViewer>
 
         <GridSplitter Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ></GridSplitter>
+        <GroupBox x:Name="LoggingTypeGroup"  Grid.Column="2" Grid.Row="0" Header="Logging setup">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.25*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="CheckBox">
+                        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="Margin" Value="0 0 0 5"></Setter>
+                        <Setter Property="DockPanel.Dock" Value="Bottom"></Setter>
+                        <!--<Setter Property="VerticalAlignment" Value="Bottom"></Setter>-->
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="8"></Setter>
+                        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+                        <Setter Property="TextAlignment" Value="Center"></Setter>
+                        <Setter Property="Margin" Value="0 5 0 0"></Setter>
+                        <Setter Property="DockPanel.Dock" Value="Top"></Setter>
+                    </Style>
+                </Grid.Resources>
+                <DockPanel Grid.Column="0" LastChildFill="False">
+                    <TextBlock VerticalAlignment="Top" Text="Controller Init"/>
+                    <CheckBox  x:Name="ControllerInitializations"/>
+                </DockPanel>
+                <DockPanel Grid.Column="1" LastChildFill="False">
+                    <TextBlock VerticalAlignment="Top" Text="Routes Log"/>
+                    <CheckBox  x:Name="RoutesLog"/>
+                </DockPanel>
+                <DockPanel Grid.Column="2" LastChildFill="False">
+                    <TextBlock VerticalAlignment="Top" Text="Packets Trace"/>
+                    <CheckBox  x:Name="PacketsTrace"/>
+                </DockPanel>
+                <DockPanel LastChildFill="False" Grid.Column="3">
+                    <TextBlock VerticalAlignment="Top" Text="Lines State"/>
+                    <CheckBox x:Name="LinesState"/>
+                </DockPanel>
+            </Grid>
+        </GroupBox>
         <Grid Grid.Column="2" Grid.Row="1" Background="Beige">
             <RichTextBox x:Name="ConsoleOutput" VerticalScrollBarVisibility="Auto"></RichTextBox>
         </Grid>
